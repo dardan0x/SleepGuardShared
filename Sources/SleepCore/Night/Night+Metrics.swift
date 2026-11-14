@@ -85,6 +85,13 @@ public extension Night {
   func summary(using config: SleepScoreConfig = .default) -> NightSummary {
     NightSummary(
       id: id, start: start, end: end,
-      score: score(using: config), snoringDuration: snoringDuration, eventCount: eventCount)
+      score: score(using: config), snoringDuration: snoringDuration, eventCount: eventCount,
+      loudestIntensity: loudestIntensity)
+  }
+
+  /// The loudest intensity of any event (every category, as SleepGuard's
+  /// statistics count it); `nil` without events.
+  var loudestIntensity: SnoreIntensity? {
+    events.map(\.intensity).max()
   }
 }

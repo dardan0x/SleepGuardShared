@@ -1,6 +1,6 @@
 import Foundation
 
-public enum SnoreIntensity: String, Codable, Sendable {
+public enum SnoreIntensity: String, Codable, Sendable, Comparable {
   case quiet
   case light
   case loud
@@ -13,5 +13,10 @@ public enum SnoreIntensity: String, Codable, Sendable {
     case .loud: 2
     case .epic: 3
     }
+  }
+
+  /// Ordered by `rank`: quiet < light < loud < epic.
+  public static func < (lhs: SnoreIntensity, rhs: SnoreIntensity) -> Bool {
+    lhs.rank < rhs.rank
   }
 }
