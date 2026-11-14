@@ -6,7 +6,7 @@ Code shared by the SleepGuard apps (the SwiftUI app `SleepGuard` and the UIKit-s
 
 | Product | Imports | What it holds |
 |---|---|---|
-| `SleepCore` | Foundation | Sleep score formula and config, the detection state machine and its actor, and the plain value types they use (`SnoreIntensity`, `SoundCategory`, `SleepStage`, `SleepStageSegment`, `StageStats`, `RecordingGap`, `SnoreBurst`). No SwiftData, no UI, no clock. |
+| `SleepCore` | Foundation | **The night:** `Night`, `NightEvent`, `NightEpisode`, `NightSummary` and the rules over them (`SnoringEpisodes`; `Night` metrics: snoring duration, event count, stage stats, score inputs, score, summary). **The formula and detection:** sleep score and config, the detection state machine and its actor. **Value types:** `SnoreIntensity`, `SoundCategory`, `SleepStage`, `SleepStageSegment`, `StageStats`, `RecordingGap`, `SnoreBurst`. No SwiftData, no UI, no clock. Apps map their own storage to `Night` and call these rules, so they compute the same numbers. |
 | `SleepStrings` | Foundation | `Localizable.xcstrings` and the generated `Strings` accessor. |
 | `SleepGuardDesignKit` | SwiftUI, `SleepStrings` (re-exported) | `Theme` (palette, typography, radii) passed through `@Environment(\.theme)`; `Theme.sleepGuard` is the default. Components with no domain types: `StatCard`, `SleepScoreGauge`, `MiniBarChart`, `AudioLevelMeter`, `SheetHandle`, `SheetNavHeader`, `ScaleButtonStyle`, `RecordingActionButton`, `StartRecordingButton`, `StopRecordingButton`. |
 
