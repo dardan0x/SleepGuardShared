@@ -4835,6 +4835,28 @@
           }
         }
       }
+    },
+    "session.delete.confirmTitle": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Delete This Night?"
+          }
+        }
+      }
+    },
+    "session.delete.confirmMessage": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Its recording and events will be permanently deleted. This can't be undone."
+          }
+        }
+      }
     }
   },
   "version": "1.0"
