@@ -1,0 +1,74 @@
+name: tests
+
+# Every push to main and every pull request. A shared change reaches every app,
+# so besides this package's own tests it builds SleepGuard against the candidate
+# commit through SleepGuard's dev workspace (which takes ../SleepGuardShared as
+# a local package).
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+    inputs:
+      sleepguard_ref:
+        description: SleepGuard branch to build against
+        default: main
+
+jobs:
+  core:
+    # SleepCore is Foundation-only: macOS `swift test`, no simulator.
+    runs-on: macos-26
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - name: Select newest Xcode 26
+        run: sudo xcode-select -s "$(ls -d /Applications/Xcode_26*.app | sort -V | tail -1)"
+      - name: SleepCore tests (incl. replay goldens)
+        run: swift test --filter SleepCoreTests
+
+  strings:
+    # String catalogs need Xcode's build system, so SleepStrings tests run on a simulator.
+    runs-on: macos-26
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - name: Select newest Xcode 26
+        run: sudo xcode-select -s "$(ls -d /Applications/Xcode_26*.app | sort -V | tail -1)"
+      - name: Strings.swift is in sync with Localizable.xcstrings
+        run: |
+          python3 scripts/generate-strings.py
+          git diff --exit-code -- Sources/SleepStrings/Strings.swift
+      - name: SleepStrings tests
+        run: |
+          set -o pipefail
+          xcodebuild test -scheme SleepGuardShared-Package \
+            -destination 'platform=iOS Simulator,name=iPhone 17 Pro,OS=latest' \
+            -only-testing:SleepStringsTests | tail -20
+
+  sleepguard:
+    # SleepGuard built against this commit, the way a developer builds it locally.
+    runs-on: macos-26
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          path: SleepGuardShared
+      - uses: actions/checkout@v4
+        with:
+          repository: dardan0x/SleepGuard
+          ref: ${{ inputs.sleepguard_ref || 'main' }}
+          path: SleepGuard
+      - name: Select newest Xcode 26
+        run: sudo xcode-select -s "$(ls -d /Applications/Xcode_26*.app | sort -V | tail -1)"
+      - name: Build SleepGuard (dev workspace → this commit)
+        working-directory: SleepGuard
+        run: |
+          set -o pipefail
+          xcodebuild build \
+            -workspace SleepGuard.xcworkspace \
+            -scheme SleepGuard \
+            -destination 'generic/platform=iOS Simulator' \
+            -derivedDataPath ../.build/app \
+            CODE_SIGNING_ALLOWED=NO \
+            | tee ../app-build.log | grep -E '^(error|warning):|\*\* BUILD' || true
+          grep -q '\*\* BUILD SUCCEEDED \*\*' ../app-build.log
