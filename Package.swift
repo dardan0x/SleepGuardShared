@@ -2,7 +2,7 @@
 import PackageDescription
 
 /// Code shared by the SleepGuard apps. One repo and one version, so a change
-/// to the score, detection, or strings reaches every app the same way.
+/// to the score, detection, strings or design tokens reaches every app the same way.
 let package = Package(
   name: "SleepGuardShared",
   platforms: [.iOS(.v17), .watchOS(.v10), .macOS(.v14)],
@@ -11,6 +11,9 @@ let package = Package(
     .library(name: "SleepCore", targets: ["SleepCore"]),
     // The string catalog and its generated `Strings` accessor.
     .library(name: "SleepStrings", targets: ["SleepStrings"]),
+    // Theme tokens and primitive SwiftUI components. No domain types, no DI.
+    // Re-exports SleepStrings.
+    .library(name: "SleepGuardDesignKit", targets: ["SleepGuardDesignKit"]),
   ],
   targets: [
     .target(
@@ -20,6 +23,10 @@ let package = Package(
       name: "SleepStrings",
       resources: [.process("Resources")],
       swiftSettings: [.swiftLanguageMode(.v6)]),
+    .target(
+      name: "SleepGuardDesignKit",
+      dependencies: ["SleepStrings"],
+      swiftSettings: [.swiftLanguageMode(.v6)]),
     .testTarget(
       name: "SleepCoreTests",
       dependencies: ["SleepCore"],
@@ -28,5 +35,9 @@ let package = Package(
     .testTarget(
       name: "SleepStringsTests",
       dependencies: ["SleepStrings"],
+      swiftSettings: [.swiftLanguageMode(.v6)]),
+    .testTarget(
+      name: "SleepGuardDesignKitTests",
+      dependencies: ["SleepGuardDesignKit"],
       swiftSettings: [.swiftLanguageMode(.v6)]),
   ])
