@@ -5,7 +5,7 @@ import Foundation
 /// Tracking these gaps allows stats to be calculated over "monitored duration"
 /// rather than total session duration, and lets the UI be transparent about
 /// detection blind spots.
-public struct RecordingGap: Codable, Sendable {
+public struct RecordingGap: Codable, Sendable, Equatable {
   /// Seconds from the session start time when this gap begins.
   public let startOffset: TimeInterval
   /// Duration of the paused interval in seconds.

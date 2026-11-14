@@ -7,7 +7,7 @@ public enum SleepStage: String, Codable, Sendable {
   case deep
 }
 
-public struct SleepStageSegment: Codable, Sendable {
+public struct SleepStageSegment: Codable, Sendable, Equatable {
   public let stage: SleepStage
   public let startOffset: TimeInterval
   public let duration: TimeInterval
