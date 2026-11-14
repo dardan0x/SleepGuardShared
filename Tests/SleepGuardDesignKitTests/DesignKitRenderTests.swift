@@ -25,6 +25,33 @@ struct DesignKitRenderTests {
     #expect(first != second)
   }
 
+  @Test(arguments: [("sleepguard", Theme.sleepGuard), ("alternate", Theme.previewAlternate)])
+  func detailComponentsRender(name: String, theme: Theme) throws {
+    let png = try render(DetailGallery().environment(\.theme, theme))
+    #expect(png.count > 1000)
+    #expect(try png != render(DetailGallery().environment(\.theme, name == "sleepguard" ? .previewAlternate : .sleepGuard)))
+    if let directory = ProcessInfo.processInfo.environment["DESIGN_KIT_RENDER_DIR"] {
+      try png.write(to: URL(fileURLWithPath: directory).appendingPathComponent("detail-\(name).png"))
+    }
+  }
+
+  @Test func eventColours() {
+    let palette = Theme.sleepGuard.palette
+    #expect(palette.eventColor(.snoring, intensity: .quiet) == palette.snoreQuiet)
+    #expect(palette.eventColor(.snoring, intensity: .epic) == palette.snoreEpic)
+    #expect(palette.eventColor(.sleepTalking, intensity: .epic) == palette.sleepTalking)
+    #expect(palette.eventColor(.coughing, intensity: .loud) == palette.noise)
+    #expect(palette.eventColor(.other, intensity: .quiet) == palette.noise)
+  }
+
+  @Test func durationFormats() {
+    #expect(SessionStatsGrid.clock(30253) == "8:24:13")
+    #expect(SessionStatsGrid.clock(245) == "4:05")
+    #expect(DurationText.over(40) == "\(Strings.commonOver) 40 \(Strings.settingsUnitSecondsShort)")
+    #expect(DurationText.over(3900) == "\(Strings.commonOver) 1 \(Strings.timeHourSingular) 5 \(Strings.timeMinutePlural)")
+    #expect(DurationText.hoursAndMinutes(60) == "1 \(Strings.timeMinuteSingular)")
+  }
+
   @Test func scoreBands() {
     let palette = Theme.sleepGuard.palette
     #expect(Theme.sleepGuard.scoreColor(100) == palette.scoreGreen)
