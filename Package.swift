@@ -25,7 +25,7 @@ let package = Package(
       swiftSettings: [.swiftLanguageMode(.v6)]),
     .target(
       name: "SleepGuardDesignKit",
-      dependencies: ["SleepStrings"],
+      dependencies: ["SleepStrings", "SleepCore"],
       swiftSettings: [.swiftLanguageMode(.v6)]),
     .testTarget(
       name: "SleepCoreTests",
