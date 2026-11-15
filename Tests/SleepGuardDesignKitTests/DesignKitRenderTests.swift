@@ -45,6 +45,21 @@ struct DesignKitRenderTests {
     }
   }
 
+  @Test(arguments: [("sleepguard", Theme.sleepGuard), ("alternate", Theme.previewAlternate)])
+  func playerComponentsRender(name: String, theme: Theme) throws {
+    let png = try render(PlayerGallery().environment(\.theme, theme))
+    #expect(png.count > 1000)
+    #expect(try png != render(PlayerGallery().environment(\.theme, name == "sleepguard" ? .previewAlternate : .sleepGuard)))
+    if let directory = ProcessInfo.processInfo.environment["DESIGN_KIT_RENDER_DIR"] {
+      try png.write(to: URL(fileURLWithPath: directory).appendingPathComponent("player-\(name).png"))
+    }
+  }
+
+  @Test func playerClockFormat() {
+    #expect(PlayerProgress.clock(125) == "2:05")
+    #expect(PlayerProgress.clock(-3) == "0:00")
+  }
+
   @Test func eventColours() {
     let palette = Theme.sleepGuard.palette
     #expect(palette.eventColor(.snoring, intensity: .quiet) == palette.snoreQuiet)
