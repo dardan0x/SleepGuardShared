@@ -85,6 +85,37 @@ struct NightStatisticsTests {
     #expect(state.dayScore == 90)
   }
 
+  // MARK: - Week strip and snoring level
+
+  @Test func snoringLevelFollowsTheShareOfTheNight() {
+    #expect(night(day: 9, hours: 10, snoring: 0).snoringLevel == .quiet)
+    #expect(night(day: 9, hours: 10, snoring: 1800).snoringLevel == .quiet) // exactly 5%
+    #expect(night(day: 9, hours: 10, snoring: 1801).snoringLevel == .light)
+    #expect(night(day: 9, hours: 10, snoring: 5400).snoringLevel == .light) // exactly 15%
+    #expect(night(day: 9, hours: 10, snoring: 5401).snoringLevel == .loud)
+    #expect(night(day: 9, hours: 0, snoring: 60).snoringShare == 0)
+  }
+
+  @Test func weekStripIsSevenDaysEndingTodayWithRecentNights() throws {
+    let state = try #require(dashboard([
+      night(day: 9, hours: 10, snoring: 6000), night(day: 7, hours: 10, snoring: 0), night(day: 1, hours: 10, snoring: 6000),
+    ]))
+    let week = state.week(now: now, calendar: calendar)
+    #expect(week.count == 7)
+    #expect(week.first?.date == date(day: 4, hour: 0))
+    #expect(week.last?.date == date(day: 10, hour: 0))
+    #expect(week.map(\.isToday) == [false, false, false, false, false, false, true])
+    #expect(week.map(\.snoringLevel) == [nil, nil, nil, .quiet, nil, .loud, nil])
+  }
+
+  /// The strip reads only the 7 most recent nights, as SleepGuard's did.
+  @Test func weekStripUsesOnlyRecentNights() throws {
+    let older = night(day: 8, hour: 12, hours: 10, snoring: 6000)
+    let recent = (0..<7).map { night(day: 9, hour: 13 + $0, hours: 1) }
+    let week = try #require(dashboard([older] + recent)).week(now: now, calendar: calendar)
+    #expect(week[4].snoringLevel == nil) // day 8: its night isn't among the recent 7
+  }
+
   // MARK: - Week over week (SleepGuard's WeekOverWeekTrendCalculatorTests)
 
   /// `recent` scores for days 0…, then `previous` scores for the days after, at midday.
