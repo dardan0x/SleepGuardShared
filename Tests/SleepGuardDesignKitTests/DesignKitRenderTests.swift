@@ -35,6 +35,16 @@ struct DesignKitRenderTests {
     }
   }
 
+  @Test(arguments: [("sleepguard", Theme.sleepGuard), ("alternate", Theme.previewAlternate)])
+  func statisticsComponentsRender(name: String, theme: Theme) throws {
+    let png = try render(StatisticsGallery().environment(\.theme, theme))
+    #expect(png.count > 1000)
+    #expect(try png != render(StatisticsGallery().environment(\.theme, name == "sleepguard" ? .previewAlternate : .sleepGuard)))
+    if let directory = ProcessInfo.processInfo.environment["DESIGN_KIT_RENDER_DIR"] {
+      try png.write(to: URL(fileURLWithPath: directory).appendingPathComponent("statistics-\(name).png"))
+    }
+  }
+
   @Test func eventColours() {
     let palette = Theme.sleepGuard.palette
     #expect(palette.eventColor(.snoring, intensity: .quiet) == palette.snoreQuiet)
