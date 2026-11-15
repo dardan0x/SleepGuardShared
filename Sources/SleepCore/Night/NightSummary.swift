@@ -34,4 +34,19 @@ public struct NightSummary: Sendable, Equatable, Identifiable {
   public var duration: TimeInterval {
     end.timeIntervalSince(start)
   }
+
+  /// Snoring time over the night's length, 0...1; 0 for a night with no length.
+  public var snoringShare: Double {
+    duration > 0 ? snoringDuration / duration : 0
+  }
+
+  /// How much of the night was snoring, as a level: over 15% loud, over 5%
+  /// light, otherwise quiet. Colours the dashboard's week strip.
+  public var snoringLevel: SnoreIntensity {
+    switch snoringShare {
+    case let share where share > 0.15: .loud
+    case let share where share > 0.05: .light
+    default: .quiet
+    }
+  }
 }

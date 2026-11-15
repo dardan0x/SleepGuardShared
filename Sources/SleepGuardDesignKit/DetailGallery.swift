@@ -15,8 +15,18 @@ struct DetailGallery: View {
     TimelineMark(start: start.addingTimeInterval(24000), duration: 60, category: .snoring, intensity: .quiet),
   ]
 
+  /// A week: some days without a night, the others quiet, light or loud.
+  private static let week: [NightDashboard.WeekDay] = {
+    let levels: [SnoreIntensity?] = [nil, .quiet, .light, nil, .loud, .light, .quiet]
+    return levels.enumerated().map { offset, level in
+      NightDashboard.WeekDay(
+        date: start.addingTimeInterval(Double(offset - 6) * 86400), isToday: offset == 6, snoringLevel: level)
+    }
+  }()
+
   var body: some View {
     VStack(spacing: 16) {
+      WeekStrip(days: Self.week)
       SessionStatsGrid(duration: 30240, snoringShare: 0.012, snoreTime: 305, eventCount: 5)
       NightTimeline(
         start: Self.start, end: Self.start.addingTimeInterval(8 * 3600), marks: Self.marks,
