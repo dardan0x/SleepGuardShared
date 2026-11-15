@@ -96,7 +96,8 @@ public struct CalendarMonthGrid: View {
 
   private func cell(_ day: Day) -> some View {
     let dot = day.loudest.map { theme.palette.eventColor(.snoring, intensity: $0) }
-    let background: Color = day.isSelected ? theme.palette.accent : (dot == nil ? .clear : theme.palette.bgElevated)
+    // A day with a night sits on a card, as in SleepGuard.
+    let background: Color = day.isSelected ? theme.palette.accent : (dot == nil ? .clear : theme.palette.bgCard)
     let number: Color = day.isSelected
       ? .white
       : (day.isInMonth ? theme.palette.textPrimary : theme.palette.textTertiary.opacity(0.5))
