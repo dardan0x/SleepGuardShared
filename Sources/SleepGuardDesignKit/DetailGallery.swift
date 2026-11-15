@@ -31,6 +31,9 @@ struct DetailGallery: View {
       NightTimeline(
         start: Self.start, end: Self.start.addingTimeInterval(8 * 3600), marks: Self.marks,
         gaps: [RecordingGap(startOffset: 18000, duration: 1800)], eventCount: 5, snoringDuration: 305)
+      NightTimeline(
+        start: Self.start, end: Self.start.addingTimeInterval(8 * 3600), marks: Self.marks, gaps: [],
+        eventCount: 5, snoringDuration: 305, showsTitle: false)
       RecordingGapsBanner(totalGap: 1800)
       LowBatteryBanner()
       ForEach(Array(Self.marks.prefix(3).enumerated()), id: \.offset) { index, mark in

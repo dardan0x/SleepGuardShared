@@ -18,6 +18,7 @@ public struct TimelineMark: Sendable, Equatable {
 
 /// "SNORING TIMELINE": the night as a bar with its events in their colours,
 /// recording gaps as outlined blanks, and the start and end times below.
+/// `showsTitle: false` leaves out the heading (SleepGuard's session summary).
 public struct NightTimeline: View {
   let start: Date
   let end: Date
@@ -25,11 +26,12 @@ public struct NightTimeline: View {
   let gaps: [RecordingGap]
   let eventCount: Int
   let snoringDuration: TimeInterval
+  let showsTitle: Bool
   @Environment(\.theme) private var theme
 
   public init(
     start: Date, end: Date, marks: [TimelineMark], gaps: [RecordingGap],
-    eventCount: Int, snoringDuration: TimeInterval)
+    eventCount: Int, snoringDuration: TimeInterval, showsTitle: Bool = true)
   {
     self.start = start
     self.end = end
@@ -37,14 +39,17 @@ public struct NightTimeline: View {
     self.gaps = gaps
     self.eventCount = eventCount
     self.snoringDuration = snoringDuration
+    self.showsTitle = showsTitle
   }
 
   public var body: some View {
     VStack(alignment: .leading) {
-      Text(Strings.recordingsDetailTimelineLabel)
-        .font(theme.typography.font(size: 12, weight: .semibold))
-        .foregroundStyle(theme.palette.textTertiary)
-        .tracking(1)
+      if showsTitle {
+        Text(Strings.recordingsDetailTimelineLabel)
+          .font(theme.typography.font(size: 12, weight: .semibold))
+          .foregroundStyle(theme.palette.textTertiary)
+          .tracking(1)
+      }
 
       bar
 
