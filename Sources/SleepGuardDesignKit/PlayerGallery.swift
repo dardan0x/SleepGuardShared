@@ -12,7 +12,7 @@ struct PlayerGallery: View {
     VStack(spacing: 20) {
       VStack(spacing: 24) {
         PlayerHeader(start: Self.start, duration: 125, intensity: .loud, number: 2, count: 3)
-        PlayerProgress(currentTime: 48, totalDuration: 125) { _ in }
+        ClipWaveform(samples: (0..<120).map { Float(abs(sin(Double($0) / 6))) }, currentTime: 48, totalDuration: 125, isLoading: false) { _ in }
         PlayerControls(isPlaying: true, onToggle: {}, onBack: {}, onForward: {})
         EventIntensityLegend()
       }
