@@ -48,6 +48,16 @@ public struct Night: Sendable, Equatable, Identifiable {
     end.timeIntervalSince(start)
   }
 
+  /// The shortest night worth saving: 30 minutes, 2 in Debug builds so a
+  /// night can be tried at a desk. Shorter ones are offered for discard.
+  public static var minimumSaveDuration: TimeInterval {
+    #if DEBUG
+    return 120
+    #else
+    return 1800
+    #endif
+  }
+
   /// Why recording stopped.
   public enum EndReason: String, Sendable, Equatable, CaseIterable {
     /// The user stopped it.

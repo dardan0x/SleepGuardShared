@@ -55,6 +55,41 @@ struct DesignKitRenderTests {
     }
   }
 
+  @Test(arguments: [("sleepguard", Theme.sleepGuard), ("alternate", Theme.previewAlternate)])
+  func recordingComponentsRender(name: String, theme: Theme) throws {
+    let png = try render(RecordingGallery().environment(\.theme, theme))
+    #expect(png.count > 1000)
+    #expect(try png != render(RecordingGallery().environment(\.theme, name == "sleepguard" ? .previewAlternate : .sleepGuard)))
+    if let directory = ProcessInfo.processInfo.environment["DESIGN_KIT_RENDER_DIR"] {
+      try png.write(to: URL(fileURLWithPath: directory).appendingPathComponent("recording-\(name).png"))
+    }
+  }
+
+  @Test func bedsideTexts() {
+    #expect(BedsideRecordingStatus.elapsedText(59) == "0 min")
+    #expect(BedsideRecordingStatus.elapsedText(4320) == "1 h 12 min")
+    #expect(BedsideRecordingStatus.elapsedText(-5) == "0 min")
+    // Same skeleton as SleepGuard's `DateFormatters.weekdayAndMonthDay`.
+    let time = Date(timeIntervalSinceReferenceDate: 815_000_000)
+    let formatter = DateFormatter()
+    formatter.dateFormat = DateFormatter.dateFormat(fromTemplate: "EEE MMM d", options: 0, locale: .current)
+    #expect(BedsideClockFace.dateText(time) == formatter.string(from: time).uppercased())
+    let short = DateFormatter()
+    short.timeStyle = .short
+    #expect(BedsideClockFace.timeText(time) == short.string(from: time))
+  }
+
+  @Test func bedsideMeterAndSnoreStatus() {
+    let silent = BedsideRecordingStatus.levels(db: -90, time: .now)
+    #expect(silent.count == 9 && silent.allSatisfy { $0 >= 0.1 && $0 <= 0.3 + 1e-9 })
+    #expect(BedsideRecordingStatus.levels(db: 0, time: .now).allSatisfy { $0 >= 0.7 && $0 <= 1 })
+    let palette = Theme.sleepGuard.palette
+    #expect(BedsideSnoreStatus.color(.none, palette: palette) == palette.textTertiary)
+    #expect(BedsideSnoreStatus.color(.loud, palette: palette) == palette.snoreLoud)
+    #expect(BedsideSnoreStatus.label(.epic) == Strings.sessionBedsideSnoreEpic)
+    #expect(BedsideSnoreStatus.label(.none) == Strings.statsCalendarIntensityQuiet)
+  }
+
   @Test func playerClockFormat() {
     #expect(PlayerProgress.clock(125) == "2:05")
     #expect(PlayerProgress.clock(-3) == "0:00")

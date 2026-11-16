@@ -56,4 +56,9 @@ struct EntityTests {
     let inside = NightEvent(start: start.addingTimeInterval(60), duration: 10, intensity: .quiet)
     #expect(NightEpisode(events: [long, inside]).duration == 300)
   }
+
+  /// SleepGuard's `SleepSession.minimumSaveDuration`: tests build in Debug.
+  @Test func shortestNightToSaveIsTwoMinutesInDebug() {
+    #expect(Night.minimumSaveDuration == 120)
+  }
 }
