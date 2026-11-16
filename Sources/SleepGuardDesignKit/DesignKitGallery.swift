@@ -25,9 +25,10 @@ struct DesignKitGallery: View {
   }
 }
 
-extension Theme {
+public extension Theme {
   /// A deliberately different theme, to check that components take every
-  /// colour, font and radius from the theme. Not a product theme.
+  /// colour, font and radius from the theme. Not a product theme: previews
+  /// and render tests only (here and in the content kit).
   static let previewAlternate: Theme = {
     var theme = Theme.sleepGuard
     theme.palette.bgPrimary = Color(hex: "#120A24")

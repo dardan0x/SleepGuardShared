@@ -14,6 +14,10 @@ let package = Package(
     // Theme tokens and primitive SwiftUI components. No domain types, no DI.
     // Re-exports SleepStrings.
     .library(name: "SleepGuardDesignKit", targets: ["SleepGuardDesignKit"]),
+    // Screen content: one screen's loaded layout, values and actions in.
+    // Each app hosts it in its own screen (loading, navigation, DI).
+    // Re-exports the design kit.
+    .library(name: "SleepGuardContentKit", targets: ["SleepGuardContentKit"]),
   ],
   targets: [
     .target(
@@ -27,6 +31,10 @@ let package = Package(
       name: "SleepGuardDesignKit",
       dependencies: ["SleepStrings", "SleepCore"],
       swiftSettings: [.swiftLanguageMode(.v6)]),
+    .target(
+      name: "SleepGuardContentKit",
+      dependencies: ["SleepGuardDesignKit", "SleepCore"],
+      swiftSettings: [.swiftLanguageMode(.v6)]),
     .testTarget(
       name: "SleepCoreTests",
       dependencies: ["SleepCore"],
@@ -39,5 +47,9 @@ let package = Package(
     .testTarget(
       name: "SleepGuardDesignKitTests",
       dependencies: ["SleepGuardDesignKit"],
+      swiftSettings: [.swiftLanguageMode(.v6)]),
+    .testTarget(
+      name: "SleepGuardContentKitTests",
+      dependencies: ["SleepGuardContentKit"],
       swiftSettings: [.swiftLanguageMode(.v6)]),
   ])
