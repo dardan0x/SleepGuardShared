@@ -57,59 +57,6 @@ public struct PlayerHeader: View {
   }
 }
 
-/// A seek bar over all clips, with the time played and the total.
-public struct PlayerProgress: View {
-  let currentTime: TimeInterval
-  let totalDuration: TimeInterval
-  let onSeek: (Double) -> Void
-  @Environment(\.theme) private var theme
-
-  public init(currentTime: TimeInterval, totalDuration: TimeInterval, onSeek: @escaping (Double) -> Void) {
-    self.currentTime = currentTime
-    self.totalDuration = totalDuration
-    self.onSeek = onSeek
-  }
-
-  public var body: some View {
-    let progress = totalDuration > 0 ? min(max(currentTime / totalDuration, 0), 1) : 0
-    VStack(spacing: 6) {
-      GeometryReader { geometry in
-        ZStack(alignment: .leading) {
-          Capsule().fill(theme.palette.bgElevated)
-          Capsule().fill(theme.palette.accent).frame(width: geometry.size.width * progress)
-        }
-        .frame(height: 6)
-        .frame(maxHeight: .infinity)
-        .contentShape(Rectangle())
-        .gesture(DragGesture(minimumDistance: 0).onEnded { value in
-          onSeek(min(max(value.location.x / max(geometry.size.width, 1), 0), 1))
-        })
-      }
-      .frame(height: 24)
-      HStack {
-        Text(Self.clock(currentTime))
-        Spacer()
-        Text(Self.clock(totalDuration))
-      }
-      .font(theme.typography.font(size: 11, weight: .medium))
-      .foregroundStyle(theme.palette.textTertiary)
-      .monospacedDigit()
-    }
-    .accessibilityElement()
-    .accessibilityLabel(Strings.snoringEventHeaderPlayerView)
-    .accessibilityValue("\(Self.clock(currentTime)) / \(Self.clock(totalDuration))")
-    .accessibilityAdjustableAction { direction in
-      guard totalDuration > 0 else { return }
-      let step = direction == .increment ? 15.0 : -15.0
-      onSeek(min(max((currentTime + step) / totalDuration, 0), 1))
-    }
-  }
-
-  static func clock(_ interval: TimeInterval) -> String {
-    Duration.seconds(max(0, interval)).formatted(.time(pattern: .minuteSecond))
-  }
-}
-
 /// Back 15 s, play or pause, forward 15 s.
 public struct PlayerControls: View {
   let isPlaying: Bool

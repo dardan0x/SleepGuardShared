@@ -91,8 +91,11 @@ struct DesignKitRenderTests {
   }
 
   @Test func playerClockFormat() {
-    #expect(PlayerProgress.clock(125) == "2:05")
-    #expect(PlayerProgress.clock(-3) == "0:00")
+    #expect(PlayerTime.clock(125) == "2:05")
+    #expect(PlayerTime.clock(-3) == "0:00")
+    #expect(ClipWaveform.barHeight(index: 0, of: 40, samples: [], maxHeight: 80) == 2)
+    #expect(ClipWaveform.barHeight(index: 20, of: 40, samples: [0, 1], maxHeight: 80) == 72)
+    #expect(ClipWaveform.barHeight(index: 0, of: 40, samples: [0, 1], maxHeight: 80) == 3)
   }
 
   @Test func eventColours() {
