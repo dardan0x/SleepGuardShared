@@ -1,6 +1,7 @@
 import SwiftUI
 
-/// One night in a list of nights: time span, event count, score. Taps open it.
+/// One night in a list of nights: time span, length and events, score. Taps
+/// open it. SleepGuard's session row in an expanded day.
 public struct NightRow: View {
   let start: Date
   let end: Date
@@ -25,12 +26,16 @@ public struct NightRow: View {
           Text("\(start.formatted(date: .omitted, time: .shortened)) – \(end.formatted(date: .omitted, time: .shortened))")
             .font(theme.typography.font(size: 14, weight: .medium))
             .foregroundStyle(theme.palette.textPrimary)
-          Text(String(format: Strings.recordingsDetailEventsCountFormat, eventCount))
+          Text(String(format: Strings.recordingsDetailDateEventsFormat, DurationText.hoursAndMinutes(end.timeIntervalSince(start)), eventCount))
             .font(theme.typography.font(size: 12))
             .foregroundStyle(theme.palette.textSecondary)
         }
         Spacer()
         ScoreBadge(score: score, size: 32)
+        Image(systemName: "chevron.right")
+          .font(.system(size: 11, weight: .semibold))
+          .foregroundStyle(theme.palette.textTertiary)
+          .accessibilityHidden(true)
       }
       .padding(.horizontal, 16)
       .padding(.vertical, 8)
