@@ -255,6 +255,7 @@ public enum Strings {
   public static var sessionChargingAlertStartAnyway: String { String(localized: "session.chargingAlert.startAnyway", bundle: .module) }
   public static var sessionChargingAlertTitle: String { String(localized: "session.chargingAlert.title", bundle: .module) }
   public static var sessionCountdownLabel: String { String(localized: "session.countdown.label", bundle: .module) }
+  public static var sessionCountdownNotificationBody: String { String(localized: "session.countdown.notificationBody", bundle: .module) }
   public static var sessionDeleteConfirmMessage: String { String(localized: "session.delete.confirmMessage", bundle: .module) }
   public static var sessionDeleteConfirmTitle: String { String(localized: "session.delete.confirmTitle", bundle: .module) }
   public static var sessionDetailHiddenEventsFormat: String { String(localized: "session.detail.hiddenEventsFormat", bundle: .module) }

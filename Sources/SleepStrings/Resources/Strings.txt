@@ -203,3 +203,4 @@ a11y.skipBack15 = Back 15 seconds
 a11y.skipForward15 = Forward 15 seconds
 a11y.previousMonth = Previous month
 a11y.nextMonth = Next month
+session.countdown.notificationBody = Your recording session is starting now
