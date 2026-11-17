@@ -7,6 +7,7 @@ public enum Strings {
   public static var a11yGeneratingReport: String { String(localized: "a11y.generatingReport", bundle: .module) }
   public static var a11yNextMonth: String { String(localized: "a11y.nextMonth", bundle: .module) }
   public static var a11yPause: String { String(localized: "a11y.pause", bundle: .module) }
+  public static var a11yPreviewMelody: String { String(localized: "a11y.previewMelody", bundle: .module) }
   public static var a11yPreviousMonth: String { String(localized: "a11y.previousMonth", bundle: .module) }
   public static var a11yScoreOutOf100: String { String(localized: "a11y.scoreOutOf100", bundle: .module) }
   public static var a11yShare: String { String(localized: "a11y.share", bundle: .module) }
@@ -121,6 +122,18 @@ public enum Strings {
   public static var loudIntensityLabelEventPlayerView: String { String(localized: "loud.intensity.label.event.player.view", bundle: .module) }
   public static var loudNightsCalendarStatCardLabel: String { String(localized: "loud.nights.calendar.stat.card.label", bundle: .module) }
   public static var loudSnoreEventPlayerView: String { String(localized: "loud.snore.event.player.view", bundle: .module) }
+  public static var melodyAcousticGuitar: String { String(localized: "melody.acousticGuitar", bundle: .module) }
+  public static var melodyAttentionChime: String { String(localized: "melody.attentionChime", bundle: .module) }
+  public static var melodyBabyStopFemale: String { String(localized: "melody.babyStopFemale", bundle: .module) }
+  public static var melodyBabyStopMale: String { String(localized: "melody.babyStopMale", bundle: .module) }
+  public static var melodyBirdChittering: String { String(localized: "melody.birdChittering", bundle: .module) }
+  public static var melodyClapping: String { String(localized: "melody.clapping", bundle: .module) }
+  public static var melodyCustomNameFormat: String { String(localized: "melody.customNameFormat", bundle: .module) }
+  public static var melodyCuteCatMeow: String { String(localized: "melody.cuteCatMeow", bundle: .module) }
+  public static var melodyFunnyAlarm: String { String(localized: "melody.funnyAlarm", bundle: .module) }
+  public static var melodyFunnyCartoon: String { String(localized: "melody.funnyCartoon", bundle: .module) }
+  public static var melodySnareClap: String { String(localized: "melody.snareClap", bundle: .module) }
+  public static var melodySqueakyToy: String { String(localized: "melody.squeakyToy", bundle: .module) }
   public static var muteForSession: String { String(localized: "mute.for.session", bundle: .module) }
   public static var notificationsSoftAskBody: String { String(localized: "notifications.soft.ask.body", bundle: .module) }
   public static var notificationsSoftAskEnable: String { String(localized: "notifications.soft.ask.enable", bundle: .module) }
