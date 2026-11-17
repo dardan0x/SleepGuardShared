@@ -4857,6 +4857,17 @@
           }
         }
       }
+    },
+    "session.countdown.notificationBody": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Your recording session is starting now"
+          }
+        }
+      }
     }
   },
   "version": "1.0"
