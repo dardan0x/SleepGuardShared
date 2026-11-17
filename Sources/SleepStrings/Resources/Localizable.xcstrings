@@ -4868,6 +4868,149 @@
           }
         }
       }
+    },
+    "melody.funnyAlarm": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Funny Alarm"
+          }
+        }
+      }
+    },
+    "melody.clapping": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Clapping"
+          }
+        }
+      }
+    },
+    "melody.snareClap": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Snare Clap"
+          }
+        }
+      }
+    },
+    "melody.birdChittering": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bird Chittering"
+          }
+        }
+      }
+    },
+    "melody.cuteCatMeow": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cute Cat Meow"
+          }
+        }
+      }
+    },
+    "melody.attentionChime": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Attention Chime"
+          }
+        }
+      }
+    },
+    "melody.babyStopFemale": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Baby Stop - Female Voice"
+          }
+        }
+      }
+    },
+    "melody.babyStopMale": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Baby Stop - Male Voice"
+          }
+        }
+      }
+    },
+    "melody.acousticGuitar": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Acoustic Guitar"
+          }
+        }
+      }
+    },
+    "melody.squeakyToy": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Squeaky Toy"
+          }
+        }
+      }
+    },
+    "melody.funnyCartoon": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Funny Cartoon"
+          }
+        }
+      }
+    },
+    "melody.customNameFormat": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "My Sound %d"
+          }
+        }
+      }
+    },
+    "a11y.previewMelody": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Preview"
+          }
+        }
+      }
     }
   },
   "version": "1.0"

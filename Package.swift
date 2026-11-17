@@ -11,6 +11,8 @@ let package = Package(
     .library(name: "SleepCore", targets: ["SleepCore"]),
     // The string catalog and its generated `Strings` accessor.
     .library(name: "SleepStrings", targets: ["SleepStrings"]),
+    // The Snore Interrupter's built-in sound files (the catalog is SleepCore's `Melody`).
+    .library(name: "SleepMelodies", targets: ["SleepMelodies"]),
     // Theme tokens and primitive SwiftUI components. No domain types, no DI.
     // Re-exports SleepStrings.
     .library(name: "SleepGuardDesignKit", targets: ["SleepGuardDesignKit"]),
@@ -25,6 +27,11 @@ let package = Package(
       swiftSettings: [.swiftLanguageMode(.v6)]),
     .target(
       name: "SleepStrings",
+      resources: [.process("Resources")],
+      swiftSettings: [.swiftLanguageMode(.v6)]),
+    .target(
+      name: "SleepMelodies",
+      dependencies: ["SleepCore"],
       resources: [.process("Resources")],
       swiftSettings: [.swiftLanguageMode(.v6)]),
     .target(
@@ -43,6 +50,10 @@ let package = Package(
     .testTarget(
       name: "SleepStringsTests",
       dependencies: ["SleepStrings"],
+      swiftSettings: [.swiftLanguageMode(.v6)]),
+    .testTarget(
+      name: "SleepMelodiesTests",
+      dependencies: ["SleepMelodies", "SleepCore"],
       swiftSettings: [.swiftLanguageMode(.v6)]),
     .testTarget(
       name: "SleepGuardDesignKitTests",
