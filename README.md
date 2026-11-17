@@ -8,7 +8,8 @@ Code shared by the SleepGuard apps (the SwiftUI app `SleepGuard` and the UIKit-s
 |---|---|---|
 | `SleepCore` | Foundation | **The night:** `Night`, `NightEvent`, `NightEpisode`, `NightSummary` and the rules over them (`SnoringEpisodes`; `Night` metrics: snoring duration, event count, stage stats, score inputs, score, summary). **The formula and detection:** sleep score and config, the detection state machine and its actor. **Value types:** `SnoreIntensity`, `SoundCategory`, `SleepStage`, `SleepStageSegment`, `StageStats`, `RecordingGap`, `SnoreBurst`. No SwiftData, no UI, no clock. Apps map their own storage to `Night` and call these rules, so they compute the same numbers. |
 | `SleepStrings` | Foundation | `Localizable.xcstrings` and the generated `Strings` accessor. |
-| `SleepGuardDesignKit` | SwiftUI, `SleepStrings` (re-exported) | `Theme` (palette, typography, radii) passed through `@Environment(\.theme)`; `Theme.sleepGuard` is the default. Components with no domain types: `StatCard`, `SleepScoreGauge`, `MiniBarChart`, `AudioLevelMeter`, `SheetHandle`, `SheetNavHeader`, `ScaleButtonStyle`, `RecordingActionButton`, `StartRecordingButton`, `StopRecordingButton`. |
+| `SleepGuardDesignKit` | SwiftUI, `SleepCore`, `SleepStrings` (re-exported) | **Tokens:** `Theme` (palette, typography, radii) passed through `@Environment(\.theme)`; `Theme.sleepGuard` is the default. **Components** that only take values: cards and gauges (`StatCard`, `SleepScoreGauge`, `SessionStatsGrid`, `StatTile`), charts (`MiniBarChart`, `SnoringBarChart`, `WeekStrip`, `CalendarMonthGrid`), night pieces (`NightTimeline`, `EventRow`, `EventCard`, `NightRow`, `NightCard`, `DayRow`, banners), player pieces (`PlayerHeader`, `ClipWaveform`, `PlayerControls`, `PlayerEventRow`, `EnhancedAudioToggle`), recording pieces (`PrestartHeader`, `BedsideClockFace`, `SessionSummaryHeader`, …), buttons. No product decisions. |
+| `SleepGuardContentKit` | SwiftUI, `SleepCore`, `SleepGuardDesignKit` (re-exported) | **Screen content:** one screen's loaded layout, values and actions in: `StatisticsDashboardContent`, `TrendsContent`, `CalendarContent`, `LastSevenNightsContent`, `NightsListContent`, `NightDetailContent`, `EventsGridContent`, `PlayerContent` / `PlayerCard`, `PrestartContent`, `BedsideClockContent`, `SessionSummaryContent`, and empty / loading content. App-only extras go in `@ViewBuilder` slots. Each app hosts it in its own screen (loading, navigation, DI); see the apps' ADRs on shared screen content. |
 
 What does not belong here: persistence models, services, navigation, anything that differs between the apps.
 
@@ -47,7 +48,7 @@ Keep this repo checked out next to the apps (`../SleepGuardShared`). Each app ha
 
 ## Tests
 
-`sh scripts/run-tests.sh` runs `SleepCore` tests on macOS (`swift test`) and the `SleepStrings` and `SleepGuardDesignKit` tests on the iOS Simulator. The design kit tests render every component in two themes; set `TEST_RUNNER_DESIGN_KIT_RENDER_DIR=/some/dir` to keep the images.
+`sh scripts/run-tests.sh` runs `SleepCore` tests on macOS (`swift test`) and the `SleepStrings`, `SleepGuardDesignKit` and `SleepGuardContentKit` tests on the iOS Simulator. The kit tests render every component and every screen's content in two themes; set `TEST_RUNNER_DESIGN_KIT_RENDER_DIR=/some/dir` to keep the images. `ImageRenderer` can't draw UIKit-backed views (`List`, `ScrollView` contents, `Toggle`, segmented `Picker`): render the part inside them, and check the rest in the apps.
 
 ## Design kit rules
 
