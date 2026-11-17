@@ -11,6 +11,7 @@ public enum Strings {
   public static var a11yPreviousMonth: String { String(localized: "a11y.previousMonth", bundle: .module) }
   public static var a11yScoreOutOf100: String { String(localized: "a11y.scoreOutOf100", bundle: .module) }
   public static var a11yShare: String { String(localized: "a11y.share", bundle: .module) }
+  public static var a11yShareRecording: String { String(localized: "a11y.shareRecording", bundle: .module) }
   public static var a11ySkipBack15: String { String(localized: "a11y.skipBack15", bundle: .module) }
   public static var a11ySkipForward15: String { String(localized: "a11y.skipForward15", bundle: .module) }
   public static var a11ySleepScore: String { String(localized: "a11y.sleepScore", bundle: .module) }
@@ -255,6 +256,21 @@ public enum Strings {
   public static var recordingsPlayerStatLowFreqRatio: String { String(localized: "recordings.player.statLowFreqRatio", bundle: .module) }
   public static var recordingsPlayerStatSpectralCentroid: String { String(localized: "recordings.player.statSpectralCentroid", bundle: .module) }
   public static var recordingsStatisticsLoadedView: String { String(localized: "recordings.statistics.loaded.view", bundle: .module) }
+  public static var reportBasedOn: String { String(localized: "report.basedOn", bundle: .module) }
+  public static var reportBasedOnStages: String { String(localized: "report.basedOnStages", bundle: .module) }
+  public static var reportColumnDuration: String { String(localized: "report.column.duration", bundle: .module) }
+  public static var reportColumnIntensity: String { String(localized: "report.column.intensity", bundle: .module) }
+  public static var reportColumnTime: String { String(localized: "report.column.time", bundle: .module) }
+  public static var reportColumnType: String { String(localized: "report.column.type", bundle: .module) }
+  public static var reportContinued: String { String(localized: "report.continued", bundle: .module) }
+  public static var reportEvents: String { String(localized: "report.events", bundle: .module) }
+  public static var reportFooterFormat: String { String(localized: "report.footerFormat", bundle: .module) }
+  public static var reportRatingExcellent: String { String(localized: "report.rating.excellent", bundle: .module) }
+  public static var reportRatingFair: String { String(localized: "report.rating.fair", bundle: .module) }
+  public static var reportRatingPoor: String { String(localized: "report.rating.poor", bundle: .module) }
+  public static var reportScoreLabel: String { String(localized: "report.scoreLabel", bundle: .module) }
+  public static var reportSleepTalkingFormat: String { String(localized: "report.sleepTalkingFormat", bundle: .module) }
+  public static var reportTitleFormat: String { String(localized: "report.titleFormat", bundle: .module) }
   public static var saveFailed: String { String(localized: "save.failed", bundle: .module) }
   public static var saveMelodyPickerSheet: String { String(localized: "save.melody.picker.sheet", bundle: .module) }
   public static var saveRecordCustomMelodySheet: String { String(localized: "save.record.custom.melody.sheet", bundle: .module) }
