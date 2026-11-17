@@ -105,7 +105,8 @@ public enum SleepScore {
   }
 
   /// Only applies with Watch/HealthKit data. Targets: deep ≥ 15%, REM ≥ 18%, awake ≤ 8%.
-  private static func stagePenalty(_ stages: StageStats?, config: SleepScoreConfig) -> Int {
+  /// Public so the sleep-stages sheet shows the penalty the score applies.
+  public static func stagePenalty(_ stages: StageStats?, config: SleepScoreConfig) -> Int {
     guard let stages else { return 0 }
     let deepDeficit = max(0, (config.deepPctTarget - stages.deepPct) * config.deepDeficitMultiplier)
     let remDeficit = max(0, (config.remPctTarget - stages.remPct) * config.remDeficitMultiplier)

@@ -48,12 +48,7 @@ public extension Night {
 
   /// Stage percentages, or `nil` without stage data.
   var stageStats: StageStats? {
-    let total = sleepStages.reduce(0) { $0 + $1.duration }
-    guard total > 0 else { return nil }
-    func percent(_ stage: SleepStage) -> Double {
-      sleepStages.filter { $0.stage == stage }.reduce(0) { $0 + $1.duration } / total * 100
-    }
-    return StageStats(awakePct: percent(.awake), remPct: percent(.rem), lightPct: percent(.light), deepPct: percent(.deep))
+    StageStats.make(from: sleepStages)
   }
 
   /// The score formula's inputs. Intensity uses measured sound (bursts), not

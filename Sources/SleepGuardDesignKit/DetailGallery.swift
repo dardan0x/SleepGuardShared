@@ -15,6 +15,12 @@ struct DetailGallery: View {
     TimelineMark(start: start.addingTimeInterval(24000), duration: 60, category: .snoring, intensity: .quiet),
   ]
 
+  private static let stages: [SleepStageSegment] = [(SleepStage.light, 60), (.deep, 50), (.rem, 40), (.awake, 10), (.light, 120), (.rem, 60), (.deep, 40), (.light, 100)]
+    .reduce(into: [SleepStageSegment]()) { segments, part in
+      let offset = segments.last.map { $0.startOffset + $0.duration } ?? 0
+      segments.append(SleepStageSegment(stage: part.0, startOffset: offset, duration: Double(part.1) * 60))
+    }
+
   /// A week: some days without a night, the others quiet, light or loud.
   private static let week: [NightDashboard.WeekDay] = {
     let levels: [SnoreIntensity?] = [nil, .quiet, .light, nil, .loud, .light, .quiet]
@@ -34,6 +40,10 @@ struct DetailGallery: View {
       NightTimeline(
         start: Self.start, end: Self.start.addingTimeInterval(8 * 3600), marks: Self.marks, gaps: [],
         eventCount: 5, snoringDuration: 305, showsTitle: false)
+      if let stages = SleepStageBreakdown(segments: Self.stages) {
+        SleepStageHypnogram(breakdown: stages, start: Self.start, duration: 8 * 3600)
+        SleepStageLegend(breakdown: stages)
+      }
       RecordingGapsBanner(totalGap: 1800)
       LowBatteryBanner()
       ForEach(Array(Self.marks.prefix(3).enumerated()), id: \.offset) { index, mark in
