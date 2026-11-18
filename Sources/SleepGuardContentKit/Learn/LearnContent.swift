@@ -29,22 +29,8 @@ public struct LearnContent: View {
 
 /// "Learn" with the book badge.
 struct LearnTitleRow: View {
-  @Environment(\.theme) private var theme
-
   var body: some View {
-    HStack {
-      Text(Strings.tabLearn)
-        .font(theme.typography.font(size: 34, weight: .bold))
-        .foregroundStyle(theme.palette.textPrimary)
-        .accessibilityAddTraits(.isHeader)
-      Spacer()
-      Image(systemName: "book.fill")
-        .font(.system(size: 16))
-        .foregroundStyle(.white)
-        .frame(width: 30, height: 30)
-        .background(theme.palette.accent, in: .rect(cornerRadius: 15))
-        .accessibilityHidden(true)
-    }
+    TabTitleRow(Strings.tabLearn) { TabBadge(systemImage: "book.fill") }
   }
 }
 
