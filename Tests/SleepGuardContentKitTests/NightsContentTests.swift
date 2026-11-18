@@ -29,6 +29,18 @@ struct NightsContentTests {
     #expect(NightDayCard.title(date) == formatter.string(from: date))
   }
 
+  /// The list owns expansion (the other app's UIKit list does too), so the
+  /// card shows its nights only when told.
+  @Test func anExpandedDayShowsItsNights() throws {
+    let day = try #require(NightMonth.months(from: NightsContentGallery.nights).first?.days.first { $0.nights.count > 1 })
+    func height(expanded: Bool) throws -> CGFloat {
+      let card = NightDayCard(day: day, isExpanded: expanded, onOpen: { _ in }, onToggle: {}, onDeleteRequest: {})
+      let renderer = ImageRenderer(content: card.environment(\.theme, .sleepGuard).frame(width: 390))
+      return try #require(renderer.uiImage).size.height
+    }
+    #expect(try height(expanded: true) > height(expanded: false) + 50)
+  }
+
   private func render(_ view: some View) throws -> Data {
     let renderer = ImageRenderer(content: view.frame(width: 390))
     renderer.scale = 2

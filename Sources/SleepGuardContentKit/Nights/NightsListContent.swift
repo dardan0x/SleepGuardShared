@@ -9,7 +9,7 @@ public struct NightsListContent: View {
   let months: [NightMonth]
   let onOpen: (NightSummary) -> Void
   let onDelete: (NightDay) -> Void
-  @Environment(\.theme) private var theme
+  @State private var expanded: Set<NightDay.ID> = []
 
   public init(months: [NightMonth], onOpen: @escaping (NightSummary) -> Void, onDelete: @escaping (NightDay) -> Void) {
     self.months = months
@@ -22,7 +22,9 @@ public struct NightsListContent: View {
       ForEach(months) { month in
         Section {
           ForEach(month.days) { day in
-            NightDayCard(day: day, onOpen: onOpen) { onDelete(day) }
+            NightDayCard(
+              day: day, isExpanded: expanded.contains(day.id), onOpen: onOpen, onToggle: { toggle(day) },
+              onDeleteRequest: { onDelete(day) })
               .padding(.vertical, 8)
               .swipeActions(edge: .trailing) {
                 Button(role: .destructive) {
@@ -34,10 +36,7 @@ public struct NightsListContent: View {
               .listRowInsets(EdgeInsets(top: 0, leading: 16, bottom: 0, trailing: 16))
           }
         } header: {
-          Text(month.month.formatted(.dateTime.month(.wide).year()))
-            .font(theme.typography.font(size: 13, weight: .semibold))
-            .foregroundStyle(theme.palette.textTertiary)
-            .textCase(.uppercase)
+          NightMonthHeader(month: month.month)
         }
         .listRowSeparator(.hidden)
         .listRowBackground(Color.clear)
@@ -47,17 +46,54 @@ public struct NightsListContent: View {
     .listStyle(.plain)
     .scrollContentBackground(.hidden)
   }
+
+  private func toggle(_ day: NightDay) {
+    withAnimation(.easeInOut(duration: 0.2)) {
+      if expanded.remove(day.id) == nil { expanded.insert(day.id) }
+    }
+  }
 }
 
-/// One day: date, recordings, length, events, average score.
-struct NightDayCard: View {
-  let day: NightDay
-  let onOpen: (NightSummary) -> Void
-  let onDeleteRequest: () -> Void
-  @State private var isExpanded = false
+/// A month's section header ("NOVEMBER 2026").
+public struct NightMonthHeader: View {
+  let month: Date
   @Environment(\.theme) private var theme
 
-  var body: some View {
+  public init(month: Date) {
+    self.month = month
+  }
+
+  public var body: some View {
+    Text(month.formatted(.dateTime.month(.wide).year()))
+      .font(theme.typography.font(size: 13, weight: .semibold))
+      .foregroundStyle(theme.palette.textTertiary)
+      .textCase(.uppercase)
+  }
+}
+
+/// One day: date, recordings, length, events, average score. Tapping a day
+/// with one night opens it; with several, `onToggle` asks to expand or
+/// collapse it (the list owns `isExpanded`). A long press asks to delete it.
+public struct NightDayCard: View {
+  let day: NightDay
+  let isExpanded: Bool
+  let onOpen: (NightSummary) -> Void
+  let onToggle: () -> Void
+  let onDeleteRequest: () -> Void
+  @Environment(\.theme) private var theme
+
+  public init(
+    day: NightDay, isExpanded: Bool, onOpen: @escaping (NightSummary) -> Void, onToggle: @escaping () -> Void,
+    onDeleteRequest: @escaping () -> Void)
+  {
+    self.day = day
+    self.isExpanded = isExpanded
+    self.onOpen = onOpen
+    self.onToggle = onToggle
+    self.onDeleteRequest = onDeleteRequest
+  }
+
+  public var body: some View {
     VStack(spacing: 0) {
       HStack(spacing: 16) {
         VStack(alignment: .leading, spacing: 6) {
@@ -106,7 +142,7 @@ struct NightDayCard: View {
     if day.nights.count == 1 {
       onOpen(day.nights[0])
     } else {
-      withAnimation(.easeInOut(duration: 0.2)) { isExpanded.toggle() }
+      onToggle()
     }
   }
 }
@@ -176,7 +212,7 @@ public struct NightsListLoadingContent: View {
       nights: [NightSummary(id: UUID(), start: .now, end: .now.addingTimeInterval(8 * 3600), score: 80, snoringDuration: 0, eventCount: 3)])
     VStack(spacing: 16) {
       ForEach(0..<4, id: \.self) { _ in
-        NightDayCard(day: placeholder, onOpen: { _ in }, onDeleteRequest: {})
+        NightDayCard(day: placeholder, isExpanded: false, onOpen: { _ in }, onToggle: {}, onDeleteRequest: {})
       }
       Spacer()
     }

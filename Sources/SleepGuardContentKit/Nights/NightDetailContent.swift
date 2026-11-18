@@ -22,7 +22,7 @@ public struct NightDetailContent<Stages: View, Footer: View>: View {
   @Environment(\.theme) private var theme
 
   /// Rows shown before "Show all".
-  static var visibleRows: Int {
+  public static var visibleRows: Int {
     4
   }
 
@@ -118,12 +118,17 @@ public extension NightDetailContent where Stages == EmptyView, Footer == EmptyVi
 }
 
 /// Score gauge, four stats, and a disturbances card when there are any.
-struct NightDetailHeader: View {
+public struct NightDetailHeader: View {
   let night: Night
   let summary: NightSummary
   @Environment(\.theme) private var theme
 
-  var body: some View {
+  public init(night: Night, summary: NightSummary) {
+    self.night = night
+    self.summary = summary
+  }
+
+  public var body: some View {
     let disturbances = night.events.filter { $0.category != .snoring }.count
     VStack(spacing: 12) {
       HStack(spacing: 16) {
