@@ -91,8 +91,9 @@ public struct OnboardingContent: View {
   }
 }
 
-/// One page's layout (render tests draw these; ImageRenderer can't draw a paged TabView).
-struct OnboardingPageView: View {
+/// One page's layout, for a container that pages on its own (render tests
+/// draw these too; ImageRenderer can't draw a paged TabView).
+public struct OnboardingPageView: View {
   let page: OnboardingPage
   let microphone: OnboardingPermission
   let health: OnboardingPermission
@@ -102,7 +103,22 @@ struct OnboardingPageView: View {
   let onStartRecording: () -> Void
   let onBrowse: () -> Void
 
-  var body: some View {
+  public init(
+    page: OnboardingPage, microphone: OnboardingPermission, health: OnboardingPermission,
+    onNext: @escaping () -> Void, onRequestMicrophone: @escaping () -> Void, onRequestHealth: @escaping () -> Void,
+    onStartRecording: @escaping () -> Void, onBrowse: @escaping () -> Void)
+  {
+    self.page = page
+    self.microphone = microphone
+    self.health = health
+    self.onNext = onNext
+    self.onRequestMicrophone = onRequestMicrophone
+    self.onRequestHealth = onRequestHealth
+    self.onStartRecording = onStartRecording
+    self.onBrowse = onBrowse
+  }
+
+  public var body: some View {
     switch page {
     case .welcome: OnboardingWelcomePage(onNext: onNext)
     case .features: OnboardingFeaturesPage(onNext: onNext)
@@ -114,12 +130,18 @@ struct OnboardingPageView: View {
   }
 }
 
-private struct OnboardingDots: View {
+/// Where you are in the onboarding: the current page is a wide pill.
+public struct OnboardingDots: View {
   let pages: [OnboardingPage]
   let current: OnboardingPage
   @Environment(\.theme) private var theme
 
-  var body: some View {
+  public init(pages: [OnboardingPage], current: OnboardingPage) {
+    self.pages = pages
+    self.current = current
+  }
+
+  public var body: some View {
     HStack(spacing: 8) {
       ForEach(pages, id: \.self) { page in
         RoundedRectangle(cornerRadius: 4)

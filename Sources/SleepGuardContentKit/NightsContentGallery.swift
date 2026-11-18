@@ -37,10 +37,7 @@ struct NightsContentGallery: View {
       case .expandedDay:
         if let day = NightMonth.months(from: Self.nights).first?.days.first(where: { $0.nights.count > 1 }) {
           VStack(spacing: 8) {
-            NightDayCard(day: day, onOpen: { _ in }, onDeleteRequest: {})
-            ForEach(day.nights) { night in
-              NightRow(start: night.start, end: night.end, eventCount: night.eventCount, score: night.score) {}
-            }
+            NightDayCard(day: day, isExpanded: true, onOpen: { _ in }, onToggle: {}, onDeleteRequest: {})
           }
           .padding(16)
         }
