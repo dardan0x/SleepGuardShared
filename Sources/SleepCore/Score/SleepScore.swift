@@ -8,6 +8,9 @@ import Foundation
 public struct SleepInputs: Sendable, Equatable {
   /// Session length (end − start), including recording gaps.
   public var totalDuration: TimeInterval
+  /// Time nothing was measured (capture interruptions such as a call). Left out
+  /// of the snoring and sleep-talking percentages; melody gaps are not in it.
+  public var unmeasuredDuration: TimeInterval
   /// Snoring time used for the snoring percentage: detected events plus
   /// recording gaps where snoring resumed (see `SleepSession.snoringDuration`).
   public var snoringDuration: TimeInterval
@@ -26,6 +29,7 @@ public struct SleepInputs: Sendable, Equatable {
 
   public init(
     totalDuration: TimeInterval,
+    unmeasuredDuration: TimeInterval = 0,
     snoringDuration: TimeInterval = 0,
     snoringEpisodeCount: Int = 0,
     quietSnoring: TimeInterval = 0,
@@ -37,6 +41,7 @@ public struct SleepInputs: Sendable, Equatable {
     stages: StageStats? = nil)
   {
     self.totalDuration = totalDuration
+    self.unmeasuredDuration = unmeasuredDuration
     self.snoringDuration = snoringDuration
     self.snoringEpisodeCount = snoringEpisodeCount
     self.quietSnoring = quietSnoring
@@ -46,6 +51,12 @@ public struct SleepInputs: Sendable, Equatable {
     self.sleepTalkingCount = sleepTalkingCount
     self.sleepTalkingDuration = sleepTalkingDuration
     self.stages = stages
+  }
+
+  /// The part of the night detection could hear: the denominator for the
+  /// snoring and sleep-talking percentages.
+  var measuredDuration: TimeInterval {
+    max(totalDuration - unmeasuredDuration, 0)
   }
 
   /// All measured snoring, any intensity: the denominator for intensity ratios.
@@ -67,7 +78,9 @@ public enum SleepScore {
     }
     let hours = duration / 3600
 
-    let snoringPercentage = (inputs.snoringDuration / duration) * 100
+    // Percentages are of the time detection could hear (formula version 2).
+    let measured = inputs.measuredDuration
+    let snoringPercentage = measured > 0 ? (inputs.snoringDuration / measured) * 100 : 0
     let snoringPenalty = min(Int(snoringPercentage * config.snoringMultiplier), config.snoringPenaltyCap)
     let eventsPenalty = min(
       Int(Double(inputs.snoringEpisodeCount) / hours * config.eventsPerHourMultiplier),
@@ -96,8 +109,8 @@ public enum SleepScore {
 
   /// Weighted about half as much as snoring: less severe, but it still fragments sleep.
   private static func sleepTalkingPenalty(_ inputs: SleepInputs, config: SleepScoreConfig) -> Int {
-    guard inputs.sleepTalkingCount > 0 else { return 0 }
-    let percentage = (inputs.sleepTalkingDuration / inputs.totalDuration) * 100
+    guard inputs.sleepTalkingCount > 0, inputs.measuredDuration > 0 else { return 0 }
+    let percentage = (inputs.sleepTalkingDuration / inputs.measuredDuration) * 100
     let perHour = Double(inputs.sleepTalkingCount) / (inputs.totalDuration / 3600)
     return min(
       Int(percentage * config.sleepTalkingPercentageMultiplier + perHour * config.sleepTalkingFrequencyMultiplier),

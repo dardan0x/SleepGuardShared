@@ -4,7 +4,8 @@ public extension SleepScore {
   /// Bump when the formula's *code* changes (a new penalty, different episode
   /// merging, gap rules). Coefficient changes don't need a bump: they change
   /// the config fingerprint in `cacheVersion(for:)`.
-  static let formulaVersion = 1
+  /// - 2 (0.30.0): percentages leave out interruption gaps (`unmeasuredDuration`).
+  static let formulaVersion = 2
 
   /// Identifies the formula + config that produced a cached score:
   /// `"<formulaVersion>-<config fingerprint>"`. A stored score whose version

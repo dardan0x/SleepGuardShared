@@ -1,0 +1,8 @@
+{
+  "sleepStage": ["awake", "rem", "light", "deep"],
+  "snoreIntensity": ["quiet", "light", "loud", "epic"],
+  "soundCategory": ["snoring", "sleepTalking", "coughing", "noise", "other"],
+  "detectionState": ["none", "quiet", "light", "loud", "epic"],
+  "detectionSensitivity": ["low", "medium", "high"],
+  "snoreInterrupterMode": ["never", "always", "fiveSeconds", "fifteenSeconds", "thirtySeconds", "sixtySeconds"]
+}

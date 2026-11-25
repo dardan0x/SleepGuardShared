@@ -238,3 +238,4 @@ store.unavailable.message = Your nights are still on this iPhone, but this versi
 store.unavailable.update = Check for Update
 session.deleteFailed.title = Couldn't Delete Night
 session.deleteFailed.message = Something went wrong while deleting this night. It's still saved, so you can try again.
+session.summary.interruptionsTimeInfo = Recording paused for %@ (a call or another app). Your score leaves that time out.

@@ -171,7 +171,7 @@ Neither app re-tests a rule. When the score changes, one suite here changes, and
 - **Share values, not persistence.** A shared `@Model` would couple both apps' schemas, migration histories and actor isolation. Mapping at each edge costs one adapter per app, and parity tests cover it.
 - **Detection as a single ordered stream.** Samples, interrupter start and stop, settings changes and session end are timestamped messages into one actor. No side path mutates detection state. Golden outputs recorded from a real night pin the behaviour.
 - **Variation through optionals and slots, never flags.** Content takes `nil` to omit a section, or a view-builder slot for app-specific UI. A brand without HealthKit loses the stages card and the Health onboarding page without the package knowing brands exist.
-- **Exact pins, verified from both sides.** A release reaches an app only through an explicit bump that passes that app's suite. Before release, this repo's CI builds SleepGuard against the candidate commit. Building UIKitWay there too is still open.
+- **Exact pins, verified from both sides.** A release reaches an app only through an explicit bump that passes that app's suite. Before release, this repo's CI builds SleepGuard and every UIKitWay brand against the candidate commit, and warns when an app's pin is more than two minor releases behind.
 
 ADRs live with the consumers: SleepGuard [0004](https://github.com/dardan0x/SleepGuard/blob/main/docs/adr/0004-shared-repo.md), [0005](https://github.com/dardan0x/SleepGuard/blob/main/docs/adr/0005-shared-design-kit.md), [0006](https://github.com/dardan0x/SleepGuard/blob/main/docs/adr/0006-shared-screen-content.md); UIKitWay [0004](https://github.com/dardan0x/SleepGuardUIKitWay/blob/main/docs/adr/0004-shared-repo.md), [0005](https://github.com/dardan0x/SleepGuardUIKitWay/blob/main/docs/adr/0005-shared-screen-content.md).
 
@@ -181,9 +181,17 @@ ADRs live with the consumers: SleepGuard [0004](https://github.com/dardan0x/Slee
 
 | Task | How |
 |---|---|
-| Test | `sh scripts/run-tests.sh`: SleepCore on macOS (208, including replay goldens); the kits render every component and screen in two themes on the simulator (39); strings and melodies (4) |
+| Test | `sh scripts/run-tests.sh`: SleepCore on macOS (229, including replay goldens, stored-value fixtures and the score golden); the kits render every component and screen in two themes on the simulator (39); strings and melodies (4) |
 | Release | Commit, push, `git tag -a 0.28.0 -m "…" && git push origin 0.28.0`. Then, in each app: `sh scripts/bump-shared.sh 0.28.0` and that app's tests |
 | Add a string | Add it to `Sources/SleepStrings/Resources/Strings.txt`, then run `python3 scripts/generate-xcstrings.py` |
 | Change detection | Re-record the goldens deliberately with `sh scripts/record-replay-goldens.sh` and explain the diff |
+| Change a stored value | Types marked `StoredValue` are persisted by the apps: add properties only (optional or decoded with a default), never rename or remove a property or raw value, and add a `Tests/SleepCoreTests/Fixtures/StoredValues/<version>/` fixture |
+
+### Release policy
+
+- **Patch** (x.y.**z**): additive and behaviour-neutral only: new strings, new public pieces, fixes that change no output.
+- **Minor** (x.**y**.0): anything an app or a user can notice: a score coefficient or formula change (bump `SleepScore.formulaVersion` for code changes; `ScoreGoldenTests` fails without it), a detection change (goldens re-recorded), a new case in an enum the apps switch over, a stored-shape change.
+- **Renames and removals** of public API go through one minor release as `@available(*, deprecated, renamed:)` (or `message:`) first, and are removed in the next minor. Example: `Night.minimumSaveDuration` was deprecated in 0.30.0 in favour of `SaveRules` and goes in 0.31.0.
+- **Skew** between the apps is allowed, but CI warns beyond two minor releases; bump with each app's `bump-shared.sh`.
 
 Ground rules: Swift 6 strict concurrency; `Sendable` values; Foundation-only `SleepCore`; values in, closures out; every visual constant from `Theme`; no app-specific branches.

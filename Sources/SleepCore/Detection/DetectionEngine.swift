@@ -4,7 +4,8 @@ import Foundation
 /// `AsyncStream` (F22-T10, ADR 0003).
 ///
 /// Everything that changes detection state is a `Message` in that one stream:
-/// samples, melody start/stop, settings changes and the session-end flush. Each
+/// samples, melody start/stop, capture interruptions, settings changes and the
+/// session-end flush. Each
 /// carries the time it was observed at its source, and the engine handles them
 /// strictly in arrival order. So a melody stop that happened before a sample is
 /// always applied before it, whichever task delivered it.
@@ -25,6 +26,10 @@ public actor DetectionEngine {
     case sample(DetectionInput, at: Date)
     case melodyDidStart(at: Date)
     case melodyDidStop(at: Date)
+    /// Capture was interrupted (a call, another app) / resumed. Ends open
+    /// events; the paused span becomes an interruption gap.
+    case captureDidPause(at: Date)
+    case captureDidResume(at: Date)
     /// Applies from the next message on.
     case settings(DetectionStateMachine.Settings)
     /// Session end: finalizes any open snore and speech events.
@@ -83,6 +88,12 @@ public actor DetectionEngine {
     case let .melodyDidStop(at):
       time = at
       outputs = machine.melodyDidStop(at: at)
+    case let .captureDidPause(at):
+      time = at
+      outputs = machine.captureDidPause(at: at)
+    case let .captureDidResume(at):
+      time = at
+      outputs = machine.captureDidResume(at: at)
     case let .settings(settings):
       machine.settings = settings
       return

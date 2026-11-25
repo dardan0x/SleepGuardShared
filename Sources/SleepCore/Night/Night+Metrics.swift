@@ -12,7 +12,7 @@ public extension Night {
   var snoringDuration: TimeInterval {
     let snoring = events.filter { $0.category == .snoring }
     let eventTime = snoring.reduce(0) { $0 + $1.duration }
-    let countableGaps = recordingGaps.filter(\.snoringResumed)
+    let countableGaps = recordingGaps.filter { $0.kind == .melody && $0.snoringResumed }
     let gapTime = countableGaps.reduce(0) { $0 + $1.duration }
     guard gapTime > 0 else { return eventTime }
 
@@ -24,9 +24,19 @@ public extension Night {
     return eventTime + (hasUncoveredGap ? gapTime : 0)
   }
 
-  /// Total recording-gap time (microphone paused).
+  /// Total recording-gap time (microphone paused, any reason).
   var gapsDuration: TimeInterval {
     recordingGaps.reduce(0) { $0 + $1.duration }
+  }
+
+  /// Time the Snore Interrupter paused the microphone.
+  var melodyGapsDuration: TimeInterval {
+    recordingGaps.filter { $0.kind == .melody }.reduce(0) { $0 + $1.duration }
+  }
+
+  /// Time capture was interrupted (a call, another app): nothing was measured.
+  var interruptionDuration: TimeInterval {
+    recordingGaps.filter { $0.kind == .interruption }.reduce(0) { $0 + $1.duration }
   }
 
   var sleepTalkingEvents: [NightEvent] {
@@ -56,6 +66,7 @@ public extension Night {
   var scoreInputs: SleepInputs {
     var inputs = SleepInputs(
       totalDuration: duration,
+      unmeasuredDuration: interruptionDuration,
       snoringDuration: snoringDuration,
       snoringEpisodeCount: displayableEpisodes.count,
       sleepTalkingCount: sleepTalkingEvents.count,

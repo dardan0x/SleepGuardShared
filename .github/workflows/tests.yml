@@ -1,9 +1,11 @@
 name: tests
 
 # Every push to main and every pull request. A shared change reaches every app,
-# so besides this package's own tests it builds SleepGuard against the candidate
-# commit through SleepGuard's dev workspace (which takes ../SleepGuardShared as
-# a local package).
+# so besides this package's own tests it builds both apps against the candidate
+# commit: SleepGuard through its dev workspace and SleepGuardUIKitWay through
+# Tuist's local mode (both take ../SleepGuardShared as a local package). Build
+# only: each app runs its own tests when it bumps. Each app job also warns when
+# that app's pin has fallen more than two minor releases behind.
 on:
   push:
     branches: [main]
@@ -12,6 +14,9 @@ on:
     inputs:
       sleepguard_ref:
         description: SleepGuard branch to build against
+        default: main
+      uikitway_ref:
+        description: SleepGuardUIKitWay branch to build against
         default: main
 
 jobs:
@@ -39,12 +44,13 @@ jobs:
         run: |
           python3 scripts/generate-strings.py
           git diff --exit-code -- Sources/SleepStrings/Strings.swift
-      - name: SleepStrings and SleepGuardDesignKit tests
+      - name: SleepStrings, SleepMelodies, design kit and content kit tests
         run: |
           set -o pipefail
           xcodebuild test -scheme SleepGuardShared-Package \
             -destination 'platform=iOS Simulator,name=iPhone 17 Pro,OS=latest' \
-            -only-testing:SleepStringsTests -only-testing:SleepGuardDesignKitTests | tail -20
+            -only-testing:SleepStringsTests -only-testing:SleepMelodiesTests \
+            -only-testing:SleepGuardDesignKitTests -only-testing:SleepGuardContentKitTests | tail -20
 
   sleepguard:
     # SleepGuard built against this commit, the way a developer builds it locally.
@@ -54,6 +60,7 @@ jobs:
       - uses: actions/checkout@v4
         with:
           path: SleepGuardShared
+          fetch-depth: 0
       - uses: actions/checkout@v4
         with:
           repository: dardan0x/SleepGuard
@@ -73,3 +80,46 @@ jobs:
             CODE_SIGNING_ALLOWED=NO \
             | tee ../app-build.log | grep -E '^(error|warning):|\*\* BUILD' || true
           grep -q '\*\* BUILD SUCCEEDED \*\*' ../app-build.log
+      - name: Release skew
+        run: sh SleepGuardShared/scripts/check-consumer-skew.sh SleepGuard
+
+  uikitway:
+    # SleepGuardUIKitWay built against this commit. It uses this package's
+    # public pieces inside UIKit containers, so a visibility or signature change
+    # can break it while SleepGuard still builds. Every brand is its own app.
+    runs-on: macos-26
+    timeout-minutes: 90
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          path: SleepGuardShared
+          fetch-depth: 0
+      - uses: actions/checkout@v4
+        with:
+          repository: dardan0x/SleepGuardUIKitWay
+          ref: ${{ inputs.uikitway_ref || 'main' }}
+          path: SleepGuardUIKitWay
+      - name: Select newest Xcode 26
+        run: sudo xcode-select -s "$(ls -d /Applications/Xcode_26*.app | sort -V | tail -1)"
+      - uses: jdx/mise-action@v2
+        with:
+          working_directory: SleepGuardUIKitWay
+      - name: Generate (local mode → this commit)
+        working-directory: SleepGuardUIKitWay
+        run: tuist generate --no-open
+      - name: Build every brand
+        working-directory: SleepGuardUIKitWay
+        run: |
+          set -o pipefail
+          for brand in $(for f in Apps/*/Sources/Brand.swift; do basename "$(dirname "$(dirname "$f")")"; done); do
+            xcodebuild build \
+              -workspace SleepGuardUIKitWay.xcworkspace \
+              -scheme "$brand" \
+              -destination 'generic/platform=iOS Simulator' \
+              -derivedDataPath ../.build/uikitway \
+              CODE_SIGNING_ALLOWED=NO \
+              | tee "../uikitway-$brand.log" | grep -E '^(error|warning):|\*\* BUILD' || true
+            grep -q '\*\* BUILD SUCCEEDED \*\*' "../uikitway-$brand.log"
+          done
+      - name: Release skew
+        run: sh SleepGuardShared/scripts/check-consumer-skew.sh SleepGuardUIKitWay

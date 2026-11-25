@@ -16,6 +16,23 @@ public struct RecordingGapsBanner: View {
   }
 }
 
+/// Shown when capture was interrupted (a call, another app): how long nothing
+/// was measured, and that the score leaves it out.
+public struct InterruptionGapsBanner: View {
+  let totalGap: TimeInterval
+  @Environment(\.theme) private var theme
+
+  public init(totalGap: TimeInterval) {
+    self.totalGap = totalGap
+  }
+
+  public var body: some View {
+    InfoBanner(
+      icon: "phone.fill", iconColor: theme.palette.textTertiary,
+      text: String(format: Strings.sessionSummaryInterruptionsTimeInfo, DurationText.over(totalGap)))
+  }
+}
+
 /// Shown when the night was saved early because the battery ran low.
 public struct LowBatteryBanner: View {
   @Environment(\.theme) private var theme

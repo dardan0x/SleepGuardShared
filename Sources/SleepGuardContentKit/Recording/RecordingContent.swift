@@ -186,8 +186,11 @@ struct SessionSummaryStack: View {
       SessionSummaryHeader(
         duration: night.duration, score: summary.score, snoringPercent: summary.snoringShare * 100,
         eventCount: summary.eventCount)
-      if !night.recordingGaps.isEmpty {
-        RecordingGapsBanner(totalGap: night.gapsDuration)
+      if night.melodyGapsDuration > 0 {
+        RecordingGapsBanner(totalGap: night.melodyGapsDuration)
+      }
+      if night.interruptionDuration > 0 {
+        InterruptionGapsBanner(totalGap: night.interruptionDuration)
       }
       if night.endReason == .lowBattery {
         LowBatteryBanner()

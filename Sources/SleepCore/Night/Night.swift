@@ -50,6 +50,11 @@ public struct Night: Sendable, Equatable, Identifiable {
 
   /// The shortest night worth saving: 30 minutes, 2 in Debug builds so a
   /// night can be tried at a desk. Shorter ones are offered for discard.
+  ///
+  /// Deprecated in 0.30.0: it branched on how the *consumer* built this
+  /// package. Pass `SaveRules` instead (`.standard`, or the app's own Debug
+  /// value). Removed in 0.31.0.
+  @available(*, deprecated, message: "Use SaveRules (SaveRules.standard, or the app's own Debug rules). Removed in 0.31.0.")
   public static var minimumSaveDuration: TimeInterval {
     #if DEBUG
     return 120

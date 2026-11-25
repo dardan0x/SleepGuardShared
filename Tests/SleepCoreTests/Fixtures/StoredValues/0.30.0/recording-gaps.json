@@ -1,0 +1,5 @@
+[
+  {"startOffset": 600, "duration": 45, "snoringResumed": true, "kind": "melody"},
+  {"startOffset": 2400, "duration": 300, "snoringResumed": false, "kind": "interruption"},
+  {"startOffset": 3000, "duration": 10, "snoringResumed": false, "kind": "a-kind-from-the-future"}
+]

@@ -58,8 +58,11 @@ public struct NightDetailContent<Stages: View, Footer: View>: View {
         NightTimeline(night: night)
       }
 
-      if !night.recordingGaps.isEmpty {
-        RecordingGapsBanner(totalGap: night.gapsDuration)
+      if night.melodyGapsDuration > 0 {
+        RecordingGapsBanner(totalGap: night.melodyGapsDuration)
+      }
+      if night.interruptionDuration > 0 {
+        InterruptionGapsBanner(totalGap: night.interruptionDuration)
       }
       if night.endReason == .lowBattery {
         LowBatteryBanner()

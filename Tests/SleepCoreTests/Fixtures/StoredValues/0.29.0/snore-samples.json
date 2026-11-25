@@ -1,0 +1,4 @@
+[
+  {"elapsed": 1.5, "db": -32.5, "peakDB": -20, "spectralScore": 0, "snoreConfidence": 0.8, "speechConfidence": 0.1, "state": "loud"},
+  {"elapsed": 1.55, "db": -50, "spectralScore": 0, "snoreConfidence": 0, "state": "none"}
+]

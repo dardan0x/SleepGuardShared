@@ -1,0 +1,6 @@
+[
+  {"stage": "deep", "startOffset": 0, "duration": 1800},
+  {"stage": "rem", "startOffset": 1800, "duration": 900},
+  {"stage": "light", "startOffset": 2700, "duration": 3600},
+  {"stage": "awake", "startOffset": 6300, "duration": 300}
+]

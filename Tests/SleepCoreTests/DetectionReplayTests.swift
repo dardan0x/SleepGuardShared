@@ -171,7 +171,7 @@ enum ReplayTranscript {
           lines.append("\(time(now)) discarded #\(numbers[id] ?? 0) \(reason)")
         case let .speechEventFinalized(event):
           lines.append("\(time(now)) speech \(time(event.start)) for \(seconds(event.duration))")
-        case .melodyStopRequested, .eventClipClosed, .snoringResumedAfterMelody, .recordingGap:
+        case .melodyStopRequested, .eventClipClosed, .snoringResumedAfterMelody, .recordingGap, .interruptionGap:
           lines.append("\(time(now)) \(output)")
         }
       }

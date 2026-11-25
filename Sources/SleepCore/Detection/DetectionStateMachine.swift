@@ -74,6 +74,9 @@ public enum DetectionOutput: Sendable, Equatable {
   case snoringResumedAfterMelody
   /// The melody ran from `start` for `duration`; record a recording gap.
   case recordingGap(start: Date, duration: TimeInterval)
+  /// Capture was interrupted (a call, another app) from `start` for
+  /// `duration`; record an interruption gap. Nothing was measured in it.
+  case interruptionGap(start: Date, duration: TimeInterval)
   case snoreEventFinalized(DetectedSnoreEvent)
   /// The event was filtered out. Delete its clip.
   case snoreEventDiscarded(id: UUID, reason: DiscardReason)
@@ -158,6 +161,8 @@ public struct DetectionStateMachine: Sendable {
   // MARK: - Melody state
 
   private var melodyStartTime: Date?
+  /// When capture was interrupted; `nil` while the mic is capturing.
+  private var capturePauseStart: Date?
   private var melodyResumeTime: Date?
   private var postMelodySnoringDetected = false
 
@@ -358,12 +363,40 @@ public struct DetectionStateMachine: Sendable {
     return [.recordingGap(start: start, duration: now.timeIntervalSince(start))]
   }
 
+  // MARK: - Capture interruptions
+
+  /// Capture stopped (a call, another app). An event can't span time nobody
+  /// heard, so open snore and speech events end at their last sample now.
+  public mutating func captureDidPause(at now: Date) -> [DetectionOutput] {
+    guard capturePauseStart == nil else { return [] }
+    capturePauseStart = now
+    var outputs: [DetectionOutput] = []
+    if activeEventStart != nil {
+      finalizeSnoreEvent(fallback: now, into: &outputs)
+    }
+    if activeSpeechEventStart != nil {
+      finalizeSpeechEvent(endTime: nil, fallback: now, into: &outputs)
+    }
+    snoreRunStart = nil
+    nonSnoreRunStart = nil
+    speechRunStart = nil
+    return outputs
+  }
+
+  /// Capture resumed: the paused span becomes an interruption gap.
+  public mutating func captureDidResume(at now: Date) -> [DetectionOutput] {
+    guard let start = capturePauseStart else { return [] }
+    capturePauseStart = nil
+    return [.interruptionGap(start: start, duration: now.timeIntervalSince(start))]
+  }
+
   // MARK: - Session end
 
   /// Ends any open snore and speech events (session stop). `now` stands in for
   /// timestamps that were never set.
   public mutating func finalizeActiveEvents(at now: Date) -> [DetectionOutput] {
-    var outputs: [DetectionOutput] = []
+    // A night that ends during an interruption keeps the paused span as a gap.
+    var outputs = captureDidResume(at: now)
     if activeEventStart != nil {
       finalizeSnoreEvent(fallback: now, into: &outputs)
     }

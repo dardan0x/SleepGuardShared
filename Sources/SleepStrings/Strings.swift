@@ -311,6 +311,7 @@ public enum Strings {
   public static var sessionRecordingStatusFormat: String { String(localized: "session.recording.statusFormat", bundle: .module) }
   public static var sessionStartFailedAlertMessage: String { String(localized: "session.startFailedAlert.message", bundle: .module) }
   public static var sessionStartFailedAlertTitle: String { String(localized: "session.startFailedAlert.title", bundle: .module) }
+  public static var sessionSummaryInterruptionsTimeInfo: String { String(localized: "session.summary.interruptionsTimeInfo", bundle: .module) }
   public static var sessionSummaryLowBatteryForceSaveInfo: String { String(localized: "session.summary.lowBattery.forceSave.info", bundle: .module) }
   public static var sessionSummaryMelodyGapsInfo: String { String(localized: "session.summary.melodyGapsInfo", bundle: .module) }
   public static var sessionSummaryMelodyGapsTimeInfo: String { String(localized: "session.summary.melodyGapsTimeInfo", bundle: .module) }

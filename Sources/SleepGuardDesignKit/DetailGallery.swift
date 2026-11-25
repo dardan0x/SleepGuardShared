@@ -45,6 +45,7 @@ struct DetailGallery: View {
         SleepStageLegend(breakdown: stages)
       }
       RecordingGapsBanner(totalGap: 1800)
+      InterruptionGapsBanner(totalGap: 600)
       LowBatteryBanner()
       ForEach(Array(Self.marks.prefix(3).enumerated()), id: \.offset) { index, mark in
         EventRow(

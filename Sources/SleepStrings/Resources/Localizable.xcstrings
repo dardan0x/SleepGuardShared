@@ -5242,6 +5242,17 @@
           }
         }
       }
+    },
+    "session.summary.interruptionsTimeInfo": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Recording paused for %@ (a call or another app). Your score leaves that time out."
+          }
+        }
+      }
     }
   },
   "version": "1.0"

@@ -57,8 +57,9 @@ struct EntityTests {
     #expect(NightEpisode(events: [long, inside]).duration == 300)
   }
 
-  /// SleepGuard's `SleepSession.minimumSaveDuration`: tests build in Debug.
-  @Test func shortestNightToSaveIsTwoMinutesInDebug() {
-    #expect(Night.minimumSaveDuration == 120)
+  @Test func theShippedSaveRuleIsHalfAnHour() {
+    #expect(SaveRules.standard.minimumDuration == 1800)
+    #expect(SaveRules.standard.isLongEnough(1800))
+    #expect(!SaveRules.standard.isLongEnough(1799))
   }
 }
