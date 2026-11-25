@@ -5187,6 +5187,61 @@
           }
         }
       }
+    },
+    "store.unavailable.title": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "We Couldn't Open Your Sleep Data"
+          }
+        }
+      }
+    },
+    "store.unavailable.message": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Your nights are still on this iPhone, but this version of the app can't read them. Update the app to get them back."
+          }
+        }
+      }
+    },
+    "store.unavailable.update": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Check for Update"
+          }
+        }
+      }
+    },
+    "session.deleteFailed.title": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Couldn't Delete Night"
+          }
+        }
+      }
+    },
+    "session.deleteFailed.message": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Something went wrong while deleting this night. It's still saved, so you can try again."
+          }
+        }
+      }
     }
   },
   "version": "1.0"

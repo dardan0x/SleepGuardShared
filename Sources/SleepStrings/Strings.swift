@@ -287,6 +287,8 @@ public enum Strings {
   public static var sessionCountdownNotificationBody: String { String(localized: "session.countdown.notificationBody", bundle: .module) }
   public static var sessionDeleteConfirmMessage: String { String(localized: "session.delete.confirmMessage", bundle: .module) }
   public static var sessionDeleteConfirmTitle: String { String(localized: "session.delete.confirmTitle", bundle: .module) }
+  public static var sessionDeleteFailedMessage: String { String(localized: "session.deleteFailed.message", bundle: .module) }
+  public static var sessionDeleteFailedTitle: String { String(localized: "session.deleteFailed.title", bundle: .module) }
   public static var sessionDetailHiddenEventsFormat: String { String(localized: "session.detail.hiddenEventsFormat", bundle: .module) }
   public static var sessionDisturbances: String { String(localized: "session.disturbances", bundle: .module) }
   public static var sessionMicrophoneAlertMessage: String { String(localized: "session.microphoneAlert.message", bundle: .module) }
@@ -455,6 +457,9 @@ public enum Strings {
   public static var statsTrendsWeek: String { String(localized: "stats.trends.week", bundle: .module) }
   public static var stopRecordCustomMelodySheet: String { String(localized: "stop.record.custom.melody.sheet", bundle: .module) }
   public static var stopSnoreInterrupterPlayer: String { String(localized: "stop.snore.interrupter.player", bundle: .module) }
+  public static var storeUnavailableMessage: String { String(localized: "store.unavailable.message", bundle: .module) }
+  public static var storeUnavailableTitle: String { String(localized: "store.unavailable.title", bundle: .module) }
+  public static var storeUnavailableUpdate: String { String(localized: "store.unavailable.update", bundle: .module) }
   public static var tabLearn: String { String(localized: "tab.learn", bundle: .module) }
   public static var tabSessions: String { String(localized: "tab.sessions", bundle: .module) }
   public static var tabSettings: String { String(localized: "tab.settings", bundle: .module) }

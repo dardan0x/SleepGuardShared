@@ -1,5 +1,4 @@
 import SleepCore
-import SleepGuardDesignKit
 import SwiftUI
 
 /// The sleep-stages sheet: what each stage is and how this night's compare

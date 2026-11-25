@@ -1,5 +1,4 @@
 import SleepCore
-import SleepGuardDesignKit
 import SwiftUI
 
 /// The night's sleep stages: the title with an info button and a collapse

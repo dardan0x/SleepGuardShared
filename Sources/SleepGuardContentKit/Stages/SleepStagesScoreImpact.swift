@@ -1,5 +1,4 @@
 import SleepCore
-import SleepGuardDesignKit
 import SwiftUI
 
 /// How the stages change the score: the formula, this night's penalty, and
