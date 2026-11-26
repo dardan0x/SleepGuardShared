@@ -48,6 +48,7 @@ SleepSettings               Foundation   The settings every app has, in UserDefa
 SleepLogging                os           Unified logging: Log.audio, .detection, .session, …
 
 SleepNotifications          UserNotif.   The start-delay notification
+SleepAudioKit               AVFoundation Capture, clips, playback, waveform, spectra, melodies (iOS)
 └─► SleepStrings
 ```
 
@@ -63,6 +64,7 @@ SleepNotifications          UserNotif.   The start-delay notification
 | `SleepFiles` | `StorageLocation` (the one file layout), `ClipFolder`, `RawLogFile`, `NightCheckpoint` (the night in progress), `ProfileFile`, `LifestyleLogFile` | Behaviour, not a protocol: each app wraps them in its own store or port |
 | `SleepLogging` | `Log`: one `Logger` per category, subsystem = the app's bundle id | Used by every app and every shared product that logs |
 | `SleepNotifications` | `StartNotification`: "the night is starting", one identifier, localized text | |
+| `SleepAudioKit` | `CaptureEngine` (microphone, event clips, raw night, interruptions, melody pause), `ClipCompressor`, `ClipPlayerEngine` (enhancement EQ and boost), `ClipWaveform`, `ClipSpectrum`, `ClipExtractor`, `MelodyPlayback`, `MelodyRecording`, `MelodyFiles`, `SampleClip` (Debug). iOS only. Its one concurrency escape hatch: `CaptureProcessor`'s `OSAllocatedUnfairLock(uncheckedState:)`, because the audio tap's thread can't await, and the lock guards AVFoundation objects that aren't `Sendable` | `CaptureSample`, `CaptureEvent`, `AudioCaptureError` are SleepCore values |
 
 ---
 

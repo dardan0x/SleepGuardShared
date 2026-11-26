@@ -31,6 +31,9 @@ let package = Package(
     .library(name: "SleepLogging", targets: ["SleepLogging"]),
     // The start-delay notification, the same in every app.
     .library(name: "SleepNotifications", targets: ["SleepNotifications"]),
+    /// Microphone capture, clip compression, playback, waveforms, spectra,
+    /// clip extraction and the Snore Interrupter's melodies (AVFoundation, iOS).
+    .library(name: "SleepAudioKit", targets: ["SleepAudioKit"]),
   ],
   targets: [
     .target(
@@ -67,6 +70,14 @@ let package = Package(
     .testTarget(
       name: "SleepNotificationsTests",
       dependencies: ["SleepNotifications"],
+      swiftSettings: [.swiftLanguageMode(.v6)]),
+    .target(
+      name: "SleepAudioKit",
+      dependencies: ["SleepCore", "SleepLogging", "SleepMelodies"],
+      swiftSettings: [.swiftLanguageMode(.v6)]),
+    .testTarget(
+      name: "SleepAudioKitTests",
+      dependencies: ["SleepAudioKit", "SleepCore"],
       swiftSettings: [.swiftLanguageMode(.v6)]),
     .target(
       name: "SleepFiles",
