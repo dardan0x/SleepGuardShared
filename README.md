@@ -192,12 +192,13 @@ Neither app re-tests a rule. When the score changes, one suite here changes, and
 
 ## Design decisions
 
-- **Share values, not persistence.** A shared `@Model` would couple both apps' schemas, migration histories and actor isolation. Mapping at each edge costs one adapter per app, and parity tests cover it.
+- **Share behaviour, not protocols.** Anything both apps do the same way lives here: rules, audio (`SleepAudioKit`), files and their layout (`SleepFiles`), the nights database (`SleepStore`), settings, HealthKit, logging, notifications. Each app wraps it in its own protocol or port, with its own DI, state and isolation, so neither app's architecture leaks into the other.
+- **One schema, each app's own access.** Since 0.36.0 both apps store `SleepStore`'s records (raw-string enums, a stored summary with its formula version, no unique constraints). SleepGuard reads them with `@Query` on the main context; UIKitWay keeps them inside a repository actor. A breaking schema change is a migration both apps take; additive changes need nothing.
 - **Detection as a single ordered stream.** Samples, interrupter start and stop, settings changes and session end are timestamped messages into one actor. No side path mutates detection state. Golden outputs recorded from a real night pin the behaviour.
 - **Variation through optionals and slots, never flags.** Content takes `nil` to omit a section, or a view-builder slot for app-specific UI. A brand without HealthKit loses the stages card and the Health onboarding page without the package knowing brands exist.
 - **Exact pins, verified from both sides.** A release reaches an app only through an explicit bump that passes that app's suite. Before release, this repo's CI builds SleepGuard and every UIKitWay brand against the candidate commit, and warns when an app's pin is more than two minor releases behind.
 
-ADRs live with the consumers: SleepGuard [0004](https://github.com/dardan0x/SleepGuard/blob/main/docs/adr/0004-shared-repo.md), [0005](https://github.com/dardan0x/SleepGuard/blob/main/docs/adr/0005-shared-design-kit.md), [0006](https://github.com/dardan0x/SleepGuard/blob/main/docs/adr/0006-shared-screen-content.md); UIKitWay [0004](https://github.com/dardan0x/SleepGuardUIKitWay/blob/main/docs/adr/0004-shared-repo.md), [0005](https://github.com/dardan0x/SleepGuardUIKitWay/blob/main/docs/adr/0005-shared-screen-content.md).
+ADRs live with the consumers: SleepGuard [0004](https://github.com/dardan0x/SleepGuard/blob/main/docs/adr/0004-shared-repo.md), [0005](https://github.com/dardan0x/SleepGuard/blob/main/docs/adr/0005-shared-design-kit.md), [0006](https://github.com/dardan0x/SleepGuard/blob/main/docs/adr/0006-shared-screen-content.md), [0010](https://github.com/dardan0x/SleepGuard/blob/main/docs/adr/0010-uniform-apps.md); UIKitWay [0004](https://github.com/dardan0x/SleepGuardUIKitWay/blob/main/docs/adr/0004-shared-repo.md), [0005](https://github.com/dardan0x/SleepGuardUIKitWay/blob/main/docs/adr/0005-shared-screen-content.md), [0013](https://github.com/dardan0x/SleepGuardUIKitWay/blob/main/docs/adr/0013-uniform-apps.md).
 
 ---
 
