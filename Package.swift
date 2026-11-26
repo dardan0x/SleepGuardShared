@@ -34,6 +34,9 @@ let package = Package(
     /// Microphone capture, clip compression, playback, waveforms, spectra,
     /// clip extraction and the Snore Interrupter's melodies (AVFoundation, iOS).
     .library(name: "SleepAudioKit", targets: ["SleepAudioKit"]),
+    /// The nights database: SwiftData records, their mapping to `Night`,
+    /// the versioned schema and safe opening.
+    .library(name: "SleepStore", targets: ["SleepStore"]),
   ],
   targets: [
     .target(
@@ -70,6 +73,14 @@ let package = Package(
     .testTarget(
       name: "SleepNotificationsTests",
       dependencies: ["SleepNotifications"],
+      swiftSettings: [.swiftLanguageMode(.v6)]),
+    .target(
+      name: "SleepStore",
+      dependencies: ["SleepCore", "SleepLogging"],
+      swiftSettings: [.swiftLanguageMode(.v6)]),
+    .testTarget(
+      name: "SleepStoreTests",
+      dependencies: ["SleepStore", "SleepCore"],
       swiftSettings: [.swiftLanguageMode(.v6)]),
     .target(
       name: "SleepAudioKit",

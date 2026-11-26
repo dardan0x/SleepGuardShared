@@ -49,6 +49,7 @@ SleepLogging                os           Unified logging: Log.audio, .detection,
 
 SleepNotifications          UserNotif.   The start-delay notification
 SleepAudioKit               AVFoundation Capture, clips, playback, waveform, spectra, melodies (iOS)
+SleepStore                  SwiftData    The nights database: records, mapping, schema, safe opening
 └─► SleepStrings
 ```
 
@@ -65,6 +66,7 @@ SleepAudioKit               AVFoundation Capture, clips, playback, waveform, spe
 | `SleepLogging` | `Log`: one `Logger` per category, subsystem = the app's bundle id | Used by every app and every shared product that logs |
 | `SleepNotifications` | `StartNotification`: "the night is starting", one identifier, localized text | |
 | `SleepAudioKit` | `CaptureEngine` (microphone, event clips, raw night, interruptions, melody pause), `ClipCompressor`, `ClipPlayerEngine` (enhancement EQ and boost), `ClipWaveform`, `ClipSpectrum`, `ClipExtractor`, `MelodyPlayback`, `MelodyRecording`, `MelodyFiles`, `SampleClip` (Debug). iOS only. Its one concurrency escape hatch: `CaptureProcessor`'s `OSAllocatedUnfairLock(uncheckedState:)`, because the audio tap's thread can't await, and the lock guards AVFoundation objects that aren't `Sendable` | `CaptureSample`, `CaptureEvent`, `AudioCaptureError` are SleepCore values |
+| `SleepStore` | `NightRecord` / `NightEventRecord` (raw-string enums, stored summary with `scoreVersion`), their mapping to `Night` / `NightEvent` / `NightSummary`, `refreshSummary(using:)`, `SleepStoreSchema` (V1 + migration plan), `SleepStore.open` (backup per version, never deletes) and `staleNights`. Each app keeps its own access: SleepGuard's `@Query` and main context, SleepGuardUIKitWay's repository actor | Schema rules: add properties with defaults; never rename or remove one |
 
 ---
 

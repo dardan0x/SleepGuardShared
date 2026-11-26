@@ -67,6 +67,11 @@ public actor NightCheckpoint {
       let averageConfidence: Double
       let bursts: [SnoreBurst]
       let clipFileName: String?
+      // Optional: files written before 0.36.0 don't have them.
+      let averageSpectralScore: Double?
+      let dominantFrequency: Double?
+      let spectralCentroid: Double?
+      let lowFreqRatio: Double?
     }
 
     let id: UUID
@@ -89,7 +94,9 @@ public actor NightCheckpoint {
         Event(
           id: $0.id, start: $0.start, duration: $0.duration, category: $0.category.rawValue,
           intensity: $0.intensity.rawValue, averageDB: $0.averageDB, peakDB: $0.peakDB,
-          averageConfidence: $0.averageConfidence, bursts: $0.bursts, clipFileName: $0.clipFileName)
+          averageConfidence: $0.averageConfidence, bursts: $0.bursts, clipFileName: $0.clipFileName,
+          averageSpectralScore: $0.averageSpectralScore, dominantFrequency: $0.dominantFrequency,
+          spectralCentroid: $0.spectralCentroid, lowFreqRatio: $0.lowFreqRatio)
       }
       recordingGaps = night.recordingGaps
       sleepStages = night.sleepStages
@@ -105,7 +112,9 @@ public actor NightCheckpoint {
             category: SoundCategory(rawValue: $0.category) ?? .other,
             intensity: SnoreIntensity(rawValue: $0.intensity) ?? .quiet,
             averageDB: $0.averageDB, peakDB: $0.peakDB, averageConfidence: $0.averageConfidence, bursts: $0.bursts,
-            clipFileName: $0.clipFileName)
+            clipFileName: $0.clipFileName, averageSpectralScore: $0.averageSpectralScore ?? 0,
+            dominantFrequency: $0.dominantFrequency ?? 0, spectralCentroid: $0.spectralCentroid ?? 0,
+            lowFreqRatio: $0.lowFreqRatio ?? 0)
         }.sorted { $0.start < $1.start },
         recordingGaps: recordingGaps,
         sleepStages: sleepStages ?? [],
