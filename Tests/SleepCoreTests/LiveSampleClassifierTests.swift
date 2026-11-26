@@ -35,3 +35,13 @@ struct LiveSampleClassifierTests {
     #expect(classifier.input(for: reading(db: -50), isMelodyPlaying: true).isMelodyPlaying)
   }
 }
+
+/// A capture sample reaches the rules unchanged.
+struct CaptureSampleTests {
+  @Test func aSampleIsItsReading() {
+    let sample = CaptureSample(time: .now, db: -30, peakDB: -20, spectralScore: 0.4, snoreConfidence: 0.7, speechConfidence: 0.1)
+    let reading = sample.reading
+    #expect(reading.db == -30 && reading.peakDB == -20 && reading.spectralScore == 0.4)
+    #expect(reading.snoreConfidence == 0.7 && reading.speechConfidence == 0.1)
+  }
+}
