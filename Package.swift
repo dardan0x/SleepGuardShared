@@ -27,6 +27,10 @@ let package = Package(
     .library(name: "SleepFiles", targets: ["SleepFiles"]),
     // The settings every app has, in UserDefaults: keys, defaults, validity.
     .library(name: "SleepSettings", targets: ["SleepSettings"]),
+    // Unified logging: the same categories in every app and shared product.
+    .library(name: "SleepLogging", targets: ["SleepLogging"]),
+    // The start-delay notification, the same in every app.
+    .library(name: "SleepNotifications", targets: ["SleepNotifications"]),
   ],
   targets: [
     .target(
@@ -54,8 +58,19 @@ let package = Package(
       dependencies: ["SleepCore"],
       swiftSettings: [.swiftLanguageMode(.v6)]),
     .target(
+      name: "SleepLogging",
+      swiftSettings: [.swiftLanguageMode(.v6)]),
+    .target(
+      name: "SleepNotifications",
+      dependencies: ["SleepStrings"],
+      swiftSettings: [.swiftLanguageMode(.v6)]),
+    .testTarget(
+      name: "SleepNotificationsTests",
+      dependencies: ["SleepNotifications"],
+      swiftSettings: [.swiftLanguageMode(.v6)]),
+    .target(
       name: "SleepFiles",
-      dependencies: ["SleepCore"],
+      dependencies: ["SleepCore", "SleepLogging"],
       swiftSettings: [.swiftLanguageMode(.v6)]),
     .target(
       name: "SleepSettings",
