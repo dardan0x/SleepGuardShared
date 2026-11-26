@@ -20,6 +20,11 @@ let package = Package(
     // Each app hosts it in its own screen (loading, navigation, DI).
     // Re-exports the design kit.
     .library(name: "SleepGuardContentKit", targets: ["SleepGuardContentKit"]),
+    // A night in Apple Health (write the night, read its stages), the same in
+    // every app. Its own product: an app or brand without HealthKit skips it.
+    .library(name: "SleepHealthKit", targets: ["SleepHealthKit"]),
+    // Files every app writes the same way: the raw log.
+    .library(name: "SleepFiles", targets: ["SleepFiles"]),
   ],
   targets: [
     .target(
@@ -41,6 +46,22 @@ let package = Package(
     .target(
       name: "SleepGuardContentKit",
       dependencies: ["SleepGuardDesignKit", "SleepCore"],
+      swiftSettings: [.swiftLanguageMode(.v6)]),
+    .target(
+      name: "SleepHealthKit",
+      dependencies: ["SleepCore"],
+      swiftSettings: [.swiftLanguageMode(.v6)]),
+    .target(
+      name: "SleepFiles",
+      dependencies: ["SleepCore"],
+      swiftSettings: [.swiftLanguageMode(.v6)]),
+    .testTarget(
+      name: "SleepHealthKitTests",
+      dependencies: ["SleepHealthKit", "SleepCore"],
+      swiftSettings: [.swiftLanguageMode(.v6)]),
+    .testTarget(
+      name: "SleepFilesTests",
+      dependencies: ["SleepFiles", "SleepCore"],
       swiftSettings: [.swiftLanguageMode(.v6)]),
     .testTarget(
       name: "SleepCoreTests",

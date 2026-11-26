@@ -34,6 +34,12 @@ SleepGuardContentKit        SwiftUI      Screen content: values, closures and vi
 
 SleepMelodies               Foundation   Bundled audio, keyed by SleepCore's Melody
 └─► SleepCore
+
+SleepHealthKit              HealthKit    A night in Apple Health: write it, read its stages
+└─► SleepCore
+
+SleepFiles                  Foundation   Files every app writes alike: the raw log
+└─► SleepCore
 ```
 
 | Module | Responsibility | Invariants |
@@ -43,6 +49,8 @@ SleepMelodies               Foundation   Bundled audio, keyed by SleepCore's Mel
 | `SleepMelodies` | Built-in melody resources | Resources only |
 | `SleepGuardDesignKit` | `Theme` (palette, typography, radii) via `@Environment(\.theme)`; components initialised with values | No services, DI or persistence types. Every visual constant comes from `Theme` |
 | `SleepGuardContentKit` | One loaded layout per screen | No loading, navigation or data access. Transient view state only |
+| `SleepHealthKit` | `HealthKitSleep`: what a night looks like in Apple Health (one "asleep" sample with snoring metadata) and how stages are read back | Behaviour, not a protocol: each app wraps it in its own service or port. No state, no logging (errors are thrown). Its own product, so an app or brand without HealthKit doesn't link it |
+| `SleepFiles` | `RawLogFile`: the raw log on disk (`RawLog` format, JSON Lines, time order, an empty log removed) | Behaviour, not a protocol; errors are thrown for the app to log |
 
 ---
 
