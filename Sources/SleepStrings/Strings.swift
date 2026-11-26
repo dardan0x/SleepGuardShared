@@ -114,6 +114,7 @@ public enum Strings {
   public static var filterNoise: String { String(localized: "filter.noise", bundle: .module) }
   public static var filterSleepTalking: String { String(localized: "filter.sleepTalking", bundle: .module) }
   public static var filterSnoring: String { String(localized: "filter.snoring", bundle: .module) }
+  public static var historyDeleteDayFailedMessage: String { String(localized: "history.deleteDayFailed.message", bundle: .module) }
   public static var lastNightStatisticsLoadedView: String { String(localized: "last.night.statistics.loaded.view", bundle: .module) }
   public static var lastTimeStatisticsLoadedView: String { String(localized: "last.time.statistics.loaded.view", bundle: .module) }
   public static var learnErrorNoContent: String { String(localized: "learn.error.noContent", bundle: .module) }
@@ -264,6 +265,8 @@ public enum Strings {
   public static var reportColumnType: String { String(localized: "report.column.type", bundle: .module) }
   public static var reportContinued: String { String(localized: "report.continued", bundle: .module) }
   public static var reportEvents: String { String(localized: "report.events", bundle: .module) }
+  public static var reportExportFailedMessage: String { String(localized: "report.exportFailed.message", bundle: .module) }
+  public static var reportExportFailedTitle: String { String(localized: "report.exportFailed.title", bundle: .module) }
   public static var reportFooterFormat: String { String(localized: "report.footerFormat", bundle: .module) }
   public static var reportRatingExcellent: String { String(localized: "report.rating.excellent", bundle: .module) }
   public static var reportRatingFair: String { String(localized: "report.rating.fair", bundle: .module) }

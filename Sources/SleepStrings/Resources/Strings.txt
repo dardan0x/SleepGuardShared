@@ -239,3 +239,6 @@ store.unavailable.update = Check for Update
 session.deleteFailed.title = Couldn't Delete Night
 session.deleteFailed.message = Something went wrong while deleting this night. It's still saved, so you can try again.
 session.summary.interruptionsTimeInfo = Recording paused for %@ (a call or another app). Your score leaves that time out.
+report.exportFailed.title = Couldn't Create Report
+report.exportFailed.message = Something went wrong while creating the PDF. Try again.
+history.deleteDayFailed.message = Something went wrong while deleting these nights. They're all still saved, so you can try again.

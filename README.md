@@ -191,7 +191,7 @@ ADRs live with the consumers: SleepGuard [0004](https://github.com/dardan0x/Slee
 
 - **Patch** (x.y.**z**): additive and behaviour-neutral only: new strings, new public pieces, fixes that change no output.
 - **Minor** (x.**y**.0): anything an app or a user can notice: a score coefficient or formula change (bump `SleepScore.formulaVersion` for code changes; `ScoreGoldenTests` fails without it), a detection change (goldens re-recorded), a new case in an enum the apps switch over, a stored-shape change.
-- **Renames and removals** of public API go through one minor release as `@available(*, deprecated, renamed:)` (or `message:`) first, and are removed in the next minor. Example: `Night.minimumSaveDuration` was deprecated in 0.30.0 in favour of `SaveRules` and goes in 0.31.0.
+- **Renames and removals** of public API go through one minor release as `@available(*, deprecated, renamed:)` (or `message:`) first, and are removed in the next minor. Example: `Night.minimumSaveDuration` was deprecated in 0.30.0 in favour of `SaveRules` and removed in 0.31.0.
 - **Skew** between the apps is allowed, but CI warns beyond two minor releases; bump with each app's `bump-shared.sh`.
 
 Ground rules: Swift 6 strict concurrency; `Sendable` values; Foundation-only `SleepCore`; values in, closures out; every visual constant from `Theme`; no app-specific branches.
