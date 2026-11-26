@@ -20,6 +20,14 @@ public struct NightEvent: Sendable, Equatable, Identifiable {
   /// The event's audio clip, as a file name the session file store resolves.
   /// `nil` when no clip was kept.
   public var clipFileName: String?
+  /// Mean spectral snore score during the event, 0…1 (0 unless the
+  /// spectrum was computed, a debug raw recording).
+  public var averageSpectralScore: Double
+  /// The clip's spectrum (Hz, Hz, 0…1), averaged over its buffers; 0 when
+  /// not measured.
+  public var dominantFrequency: Double
+  public var spectralCentroid: Double
+  public var lowFreqRatio: Double
 
   public init(
     id: UUID = UUID(),
@@ -31,7 +39,11 @@ public struct NightEvent: Sendable, Equatable, Identifiable {
     peakDB: Double = 0,
     averageConfidence: Double = 0,
     bursts: [SnoreBurst] = [],
-    clipFileName: String? = nil)
+    clipFileName: String? = nil,
+    averageSpectralScore: Double = 0,
+    dominantFrequency: Double = 0,
+    spectralCentroid: Double = 0,
+    lowFreqRatio: Double = 0)
   {
     precondition(duration >= 0, "An event can't have a negative duration")
     self.id = id
@@ -44,6 +56,10 @@ public struct NightEvent: Sendable, Equatable, Identifiable {
     self.averageConfidence = averageConfidence
     self.bursts = bursts
     self.clipFileName = clipFileName
+    self.averageSpectralScore = averageSpectralScore
+    self.dominantFrequency = dominantFrequency
+    self.spectralCentroid = spectralCentroid
+    self.lowFreqRatio = lowFreqRatio
   }
 
   public var end: Date {

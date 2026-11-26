@@ -81,3 +81,16 @@ struct SharedFilesTests {
     #expect(await file.logs() == [LifestyleLog(night: other, chips: [.exercised]), LifestyleLog(night: night, chips: [.lateMeal])])
   }
 }
+
+/// The checkpoint keeps an event's spectrum (a crash-recovered night loses nothing).
+struct CheckpointSpectrumTests {
+  @Test func theSpectrumSurvivesTheCheckpoint() throws {
+    let start = Date(timeIntervalSince1970: 1_000)
+    let night = Night(
+      start: start, end: start.addingTimeInterval(60),
+      events: [NightEvent(start: start, duration: 5, intensity: .light, dominantFrequency: 150, spectralCentroid: 300, lowFreqRatio: 0.6)])
+    let back = try NightCheckpoint.decode(NightCheckpoint.encode(night))
+    #expect(back.events.first?.dominantFrequency == 150)
+    #expect(back.events.first?.lowFreqRatio == 0.6)
+  }
+}
