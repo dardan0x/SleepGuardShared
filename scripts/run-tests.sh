@@ -13,6 +13,6 @@ cd "$(dirname "$0")/.."
 
 DESTINATION=${DESTINATION:-"platform=iOS Simulator,id=BD630AD5-5A05-4663-8F1B-A17283EBCBF5"}
 
-swift test --filter "SleepCoreTests|SleepFilesTests|SleepHealthKitTests|SleepSettingsTests"
+swift test --filter "SleepCoreTests|SleepFilesTests|SleepHealthKitTests|SleepSettingsTests|SleepNotificationsTests"
 xcodebuild test -scheme SleepGuardShared-Package -destination "$DESTINATION" \
   -derivedDataPath .build/xcode-derived-data -only-testing:SleepStringsTests -only-testing:SleepGuardDesignKitTests -only-testing:SleepGuardContentKitTests | grep -E "error:|✘|Test run with"

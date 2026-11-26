@@ -38,11 +38,17 @@ SleepMelodies               Foundation   Bundled audio, keyed by SleepCore's Mel
 SleepHealthKit              HealthKit    A night in Apple Health: write it, read its stages
 └─► SleepCore
 
-SleepFiles                  Foundation   Files every app writes alike: the raw log
-└─► SleepCore
+SleepFiles                  Foundation   Files every app keeps alike: layout, clips folder, raw log,
+├─► SleepCore                            checkpoint, profile, survey answers
+└─► SleepLogging
 
 SleepSettings               Foundation   The settings every app has, in UserDefaults
 └─► SleepCore
+
+SleepLogging                os           Unified logging: Log.audio, .detection, .session, …
+
+SleepNotifications          UserNotif.   The start-delay notification
+└─► SleepStrings
 ```
 
 | Module | Responsibility | Invariants |
@@ -54,7 +60,9 @@ SleepSettings               Foundation   The settings every app has, in UserDefa
 | `SleepGuardContentKit` | One loaded layout per screen | No loading, navigation or data access. Transient view state only |
 | `SleepHealthKit` | `HealthKitSleep`: what a night looks like in Apple Health (one "asleep" sample with snoring metadata) and how stages are read back | Behaviour, not a protocol: each app wraps it in its own service or port. No state, no logging (errors are thrown). Its own product, so an app or brand without HealthKit doesn't link it |
 | `SleepSettings` | `PreferencesDefaults`: `SleepCore`'s `SleepPreferences` in UserDefaults (keys, defaults, what a valid stored value is), a setting at a time or as one value | Behaviour, not a protocol: each app keeps its own store type (an observable object, a port) over it; its own extras stay in the app |
-| `SleepFiles` | `RawLogFile`: the raw log on disk (`RawLog` format, JSON Lines, time order, an empty log removed) | Behaviour, not a protocol; errors are thrown for the app to log |
+| `SleepFiles` | `StorageLocation` (the one file layout), `ClipFolder`, `RawLogFile`, `NightCheckpoint` (the night in progress), `ProfileFile`, `LifestyleLogFile` | Behaviour, not a protocol: each app wraps them in its own store or port |
+| `SleepLogging` | `Log`: one `Logger` per category, subsystem = the app's bundle id | Used by every app and every shared product that logs |
+| `SleepNotifications` | `StartNotification`: "the night is starting", one identifier, localized text | |
 
 ---
 
