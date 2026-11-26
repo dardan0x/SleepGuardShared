@@ -1,5 +1,6 @@
 import SleepCore
 import SwiftUI
+import SleepStrings
 
 extension SnoreIntensity {
   /// "Quiet", "Light", "Loud", "Epic".

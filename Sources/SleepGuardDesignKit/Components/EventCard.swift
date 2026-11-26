@@ -1,5 +1,6 @@
 import SleepCore
 import SwiftUI
+import SleepStrings
 
 /// One event as a small card (the all-events grid): start time, length in the
 /// event's colour, and Play when that action is given.

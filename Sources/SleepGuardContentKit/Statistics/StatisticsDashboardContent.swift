@@ -1,5 +1,7 @@
 import SleepCore
 import SwiftUI
+import SleepGuardDesignKit
+import SleepStrings
 
 /// The Statistics dashboard below its title: this week, the latest day's
 /// score, the latest night's stats, and the last seven nights.

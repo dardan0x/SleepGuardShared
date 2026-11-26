@@ -2,6 +2,7 @@
 import SwiftUI
 import Testing
 @testable import SleepGuardContentKit
+import SleepGuardDesignKit
 
 /// The store-unavailable screen renders in two themes, and the update button
 /// is drawn only when there is an action for it. Set

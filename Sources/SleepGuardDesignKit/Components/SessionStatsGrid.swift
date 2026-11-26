@@ -1,4 +1,5 @@
 import SwiftUI
+import SleepStrings
 
 /// A night's four stats in a 2×2 grid: duration, snoring share, snore time, events.
 public struct SessionStatsGrid: View {

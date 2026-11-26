@@ -4,6 +4,7 @@ import SwiftUI
 import Testing
 @testable import SleepGuardContentKit
 @testable import SleepGuardDesignKit
+import SleepStrings
 
 /// The sleep-stage card and sheet render in two themes and the theme reaches
 /// them; the texts and the hypnogram's hours. Set

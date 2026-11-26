@@ -3,6 +3,7 @@ import SleepCore
 import SwiftUI
 import Testing
 @testable import SleepGuardContentKit
+import SleepGuardDesignKit
 
 /// The player content renders in two themes and the theme reaches it; the
 /// 15-second skip lands where both apps' players put it.

@@ -1,5 +1,7 @@
 import SleepCore
 import SwiftUI
+import SleepGuardDesignKit
+import SleepStrings
 
 struct SettingsPermissionsSection: View {
   let values: SettingsPermissions

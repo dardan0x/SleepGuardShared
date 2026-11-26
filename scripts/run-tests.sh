@@ -12,6 +12,12 @@
 set -eu
 cd "$(dirname "$0")/.."
 
+# No re-exports: every product imports what it uses (consumers declare theirs).
+if grep -rn '@_exported' Sources Tests; then
+  echo "error: @_exported import found; import the module where it is used" >&2
+  exit 1
+fi
+
 DESTINATION=${DESTINATION:-"platform=iOS Simulator,id=BD630AD5-5A05-4663-8F1B-A17283EBCBF5"}
 
 swift test --filter "SleepCoreTests|SleepStoreTests|SleepFilesTests|SleepHealthKitTests|SleepSettingsTests|SleepNotificationsTests"

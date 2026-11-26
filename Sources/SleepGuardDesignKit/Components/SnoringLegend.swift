@@ -1,5 +1,6 @@
 import SleepCore
 import SwiftUI
+import SleepStrings
 
 /// Quiet, light and loud dots with their names: the key for snoring colours.
 public struct SnoringLegend: View {

@@ -1,4 +1,5 @@
 import SwiftUI
+import SleepStrings
 
 /// The playing clip as bars, played ones in the accent colour, a playhead,
 /// and the time labels. Tap to seek. While `isLoading`, placeholder bars

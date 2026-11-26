@@ -1,4 +1,6 @@
 import SwiftUI
+import SleepGuardDesignKit
+import SleepStrings
 
 /// Shown instead of the app when the nights database couldn't be opened. The
 /// file is kept, so an update that can read it brings the nights back. The

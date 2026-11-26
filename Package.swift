@@ -57,7 +57,7 @@ let package = Package(
       swiftSettings: [.swiftLanguageMode(.v6)]),
     .target(
       name: "SleepGuardContentKit",
-      dependencies: ["SleepGuardDesignKit", "SleepCore"],
+      dependencies: ["SleepGuardDesignKit", "SleepStrings", "SleepCore"],
       swiftSettings: [.swiftLanguageMode(.v6)]),
     .target(
       name: "SleepHealthKit",
@@ -125,10 +125,10 @@ let package = Package(
       swiftSettings: [.swiftLanguageMode(.v6)]),
     .testTarget(
       name: "SleepGuardDesignKitTests",
-      dependencies: ["SleepGuardDesignKit"],
+      dependencies: ["SleepGuardDesignKit", "SleepStrings"],
       swiftSettings: [.swiftLanguageMode(.v6)]),
     .testTarget(
       name: "SleepGuardContentKitTests",
-      dependencies: ["SleepGuardContentKit"],
+      dependencies: ["SleepGuardContentKit", "SleepGuardDesignKit", "SleepStrings", "SleepCore"],
       swiftSettings: [.swiftLanguageMode(.v6)]),
   ])

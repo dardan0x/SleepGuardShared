@@ -1,5 +1,6 @@
 import SleepCore
 import SwiftUI
+import SleepGuardDesignKit
 
 /// The player content with sample clips, for previews and render tests.
 /// Internal: sample data only.

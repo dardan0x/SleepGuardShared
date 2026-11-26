@@ -1,4 +1,6 @@
 import SwiftUI
+import SleepGuardDesignKit
+import SleepStrings
 
 /// Welcome: the sleepy face with drifting Z's.
 struct OnboardingWelcomePage: View {

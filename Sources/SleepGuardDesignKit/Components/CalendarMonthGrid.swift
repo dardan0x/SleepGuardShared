@@ -1,5 +1,6 @@
 import SleepCore
 import SwiftUI
+import SleepStrings
 
 /// Month title with previous / next buttons, and "Today" when given.
 public struct MonthHeader: View {

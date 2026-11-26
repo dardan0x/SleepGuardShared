@@ -1,5 +1,7 @@
 import SleepCore
 import SwiftUI
+import SleepGuardDesignKit
+import SleepStrings
 
 /// The prestart's start delay: one button per `RecordingDelay.options`, the
 /// chosen one filled. Goes in `PrestartContent`'s options slot.

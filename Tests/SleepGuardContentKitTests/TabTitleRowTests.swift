@@ -2,6 +2,7 @@
 import SwiftUI
 import Testing
 @testable import SleepGuardContentKit
+import SleepGuardDesignKit
 
 /// The tab title rows render in two themes. Set
 /// `TEST_RUNNER_DESIGN_KIT_RENDER_DIR` to keep the PNGs.

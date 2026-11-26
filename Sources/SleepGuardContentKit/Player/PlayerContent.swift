@@ -1,5 +1,7 @@
 import SleepCore
 import SwiftUI
+import SleepGuardDesignKit
+import SleepStrings
 
 /// One clip in the player's list.
 public struct PlayerClip: Identifiable, Equatable, Sendable {

@@ -1,6 +1,7 @@
 import Charts
 import SleepCore
 import SwiftUI
+import SleepStrings
 
 /// One bar of snoring minutes, coloured by the loudest intensity.
 public struct SnoringBar: Identifiable, Sendable, Equatable {

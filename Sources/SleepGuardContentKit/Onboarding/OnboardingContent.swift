@@ -1,5 +1,7 @@
 import SleepCore
 import SwiftUI
+import SleepGuardDesignKit
+import SleepStrings
 
 /// Where a permission the onboarding asks for stands.
 public enum OnboardingPermission: Equatable, Sendable {

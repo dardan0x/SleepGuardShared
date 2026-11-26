@@ -1,5 +1,6 @@
 import Foundation
 import SleepCore
+import SleepStrings
 
 /// The briefing's values as text (the strings SleepGuard's engine used to
 /// build). `%@` is filled in order without `String(format:)`, as before.

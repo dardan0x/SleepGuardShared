@@ -1,4 +1,6 @@
 import SwiftUI
+import SleepGuardDesignKit
+import SleepStrings
 
 /// Apple Health: read the night's sleep stages and write the night back.
 struct OnboardingHealthPage: View {

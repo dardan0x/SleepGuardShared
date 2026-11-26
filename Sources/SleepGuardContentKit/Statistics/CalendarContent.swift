@@ -1,5 +1,7 @@
 import SleepCore
 import SwiftUI
+import SleepGuardDesignKit
+import SleepStrings
 
 /// The calendar below its title: the month with each night's loudest snoring,
 /// the month's counts, the selected day's night, and the legend.

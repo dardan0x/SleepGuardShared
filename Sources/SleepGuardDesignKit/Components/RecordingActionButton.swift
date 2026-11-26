@@ -1,4 +1,5 @@
 import SwiftUI
+import SleepStrings
 
 /// The large glowing button behind start/stop recording. The glow and border
 /// use the theme's `destructive` (recording red); the face uses `bgCard`.

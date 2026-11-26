@@ -1,5 +1,7 @@
 import SleepCore
 import SwiftUI
+import SleepGuardDesignKit
+import SleepStrings
 
 /// The sleep-stages sheet: what each stage is and how this night's compare
 /// with the targets, then how the stages change the score. `config` is the

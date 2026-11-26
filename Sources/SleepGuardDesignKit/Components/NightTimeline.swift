@@ -1,5 +1,6 @@
 import SleepCore
 import SwiftUI
+import SleepStrings
 
 /// Something to mark on a night's timeline: a snoring episode or another event.
 public struct TimelineMark: Sendable, Equatable {

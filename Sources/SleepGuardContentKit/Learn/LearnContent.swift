@@ -1,4 +1,6 @@
 import SwiftUI
+import SleepGuardDesignKit
+import SleepStrings
 
 /// The Learn tab: its title row, then the Learn page, or "No content
 /// available" when the app has no page to show.

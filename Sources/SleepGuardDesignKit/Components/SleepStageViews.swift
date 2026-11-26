@@ -1,5 +1,6 @@
 import SleepCore
 import SwiftUI
+import SleepStrings
 
 public extension Palette {
   func stageColor(_ stage: SleepStage) -> Color {

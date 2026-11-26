@@ -1,5 +1,6 @@
 import SleepCore
 import SwiftUI
+import SleepStrings
 
 public extension Melody {
   /// A built-in's translated name, or the name a recording was saved with.
