@@ -5253,6 +5253,39 @@
           }
         }
       }
+    },
+    "report.exportFailed.title": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Couldn't Create Report"
+          }
+        }
+      }
+    },
+    "report.exportFailed.message": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Something went wrong while creating the PDF. Try again."
+          }
+        }
+      }
+    },
+    "history.deleteDayFailed.message": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Something went wrong while deleting these nights. They're all still saved, so you can try again."
+          }
+        }
+      }
     }
   },
   "version": "1.0"
