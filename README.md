@@ -40,6 +40,9 @@ SleepHealthKit              HealthKit    A night in Apple Health: write it, read
 
 SleepFiles                  Foundation   Files every app writes alike: the raw log
 └─► SleepCore
+
+SleepSettings               Foundation   The settings every app has, in UserDefaults
+└─► SleepCore
 ```
 
 | Module | Responsibility | Invariants |
@@ -50,6 +53,7 @@ SleepFiles                  Foundation   Files every app writes alike: the raw l
 | `SleepGuardDesignKit` | `Theme` (palette, typography, radii) via `@Environment(\.theme)`; components initialised with values | No services, DI or persistence types. Every visual constant comes from `Theme` |
 | `SleepGuardContentKit` | One loaded layout per screen | No loading, navigation or data access. Transient view state only |
 | `SleepHealthKit` | `HealthKitSleep`: what a night looks like in Apple Health (one "asleep" sample with snoring metadata) and how stages are read back | Behaviour, not a protocol: each app wraps it in its own service or port. No state, no logging (errors are thrown). Its own product, so an app or brand without HealthKit doesn't link it |
+| `SleepSettings` | `PreferencesDefaults`: `SleepCore`'s `SleepPreferences` in UserDefaults (keys, defaults, what a valid stored value is), a setting at a time or as one value | Behaviour, not a protocol: each app keeps its own store type (an observable object, a port) over it; its own extras stay in the app |
 | `SleepFiles` | `RawLogFile`: the raw log on disk (`RawLog` format, JSON Lines, time order, an empty log removed) | Behaviour, not a protocol; errors are thrown for the app to log |
 
 ---
