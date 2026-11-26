@@ -25,6 +25,8 @@ let package = Package(
     .library(name: "SleepHealthKit", targets: ["SleepHealthKit"]),
     // Files every app writes the same way: the raw log.
     .library(name: "SleepFiles", targets: ["SleepFiles"]),
+    // The settings every app has, in UserDefaults: keys, defaults, validity.
+    .library(name: "SleepSettings", targets: ["SleepSettings"]),
   ],
   targets: [
     .target(
@@ -54,6 +56,14 @@ let package = Package(
     .target(
       name: "SleepFiles",
       dependencies: ["SleepCore"],
+      swiftSettings: [.swiftLanguageMode(.v6)]),
+    .target(
+      name: "SleepSettings",
+      dependencies: ["SleepCore"],
+      swiftSettings: [.swiftLanguageMode(.v6)]),
+    .testTarget(
+      name: "SleepSettingsTests",
+      dependencies: ["SleepSettings", "SleepCore"],
       swiftSettings: [.swiftLanguageMode(.v6)]),
     .testTarget(
       name: "SleepHealthKitTests",
