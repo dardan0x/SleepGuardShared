@@ -1,5 +1,6 @@
 import SleepCore
 import SwiftUI
+import SleepStrings
 
 /// One US Letter page of a night's report: the first page has the summary,
 /// later pages continue the events table. Printed colours, not the app's

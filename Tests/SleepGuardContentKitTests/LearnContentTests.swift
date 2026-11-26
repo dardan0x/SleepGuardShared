@@ -2,6 +2,7 @@
 import SwiftUI
 import Testing
 @testable import SleepGuardContentKit
+import SleepGuardDesignKit
 
 /// The Learn tab without a page renders in two themes; with one it builds;
 /// the external-link script looks for the marked links and posts to its

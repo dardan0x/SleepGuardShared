@@ -1,5 +1,6 @@
 import SleepCore
 import SwiftUI
+import SleepStrings
 
 /// A day in a list of days: score ring, weekday and date, time asleep and
 /// snoring (in the loudest intensity's colour). Taps open it.

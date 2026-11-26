@@ -1,5 +1,7 @@
 import SleepCore
 import SwiftUI
+import SleepGuardDesignKit
+import SleepStrings
 
 /// Last 7 Nights below its title: the average score and its trend, a bar per
 /// day, four stats, and every day (tap opens its first night).

@@ -1,4 +1,6 @@
 import SwiftUI
+import SleepGuardDesignKit
+import SleepStrings
 
 /// The card on Statistics that asks for the profile ("Make this yours"). The
 /// screen decides when it shows (`ProfilePrompt.shouldShow`). Set Up opens

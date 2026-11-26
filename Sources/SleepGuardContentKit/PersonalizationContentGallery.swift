@@ -1,5 +1,6 @@
 import SleepCore
 import SwiftUI
+import SleepGuardDesignKit
 
 /// The briefing sheet (each kind of headline and the survey), the profile
 /// prompt card and the report's pages with sample nights, for previews and

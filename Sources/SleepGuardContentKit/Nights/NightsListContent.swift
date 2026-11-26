@@ -1,5 +1,7 @@
 import SleepCore
 import SwiftUI
+import SleepGuardDesignKit
+import SleepStrings
 
 /// The nights list: a section per month (`NightMonth.months(from:)`), a card
 /// per day. Tapping a day with one night opens it; a day with several expands.

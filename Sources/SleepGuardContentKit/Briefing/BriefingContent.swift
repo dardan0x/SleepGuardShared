@@ -1,5 +1,7 @@
 import SleepCore
 import SwiftUI
+import SleepGuardDesignKit
+import SleepStrings
 
 /// The morning briefing sheet: greeting, how the night went, an insight, a
 /// nudge to finish the profile, a closing line, and the survey. Tapping a

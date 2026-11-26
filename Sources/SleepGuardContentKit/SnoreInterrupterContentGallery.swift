@@ -1,5 +1,6 @@
 import SleepCore
 import SwiftUI
+import SleepGuardDesignKit
 
 /// The Snore Interrupter's rows, sheets and bedside pieces with sample values,
 /// for previews and render tests. Internal: sample data only.

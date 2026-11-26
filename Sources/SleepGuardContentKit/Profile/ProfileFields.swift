@@ -1,4 +1,5 @@
 import SwiftUI
+import SleepGuardDesignKit
 
 /// The small caps label over a profile field.
 struct ProfileFieldTitle: View {

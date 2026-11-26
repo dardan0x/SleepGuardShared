@@ -1,5 +1,6 @@
 import SleepCore
 import SwiftUI
+import SleepStrings
 
 // The recording screens' pieces, from SleepGuard's SleepSession views: the
 // prestart header and tips, the bedside clock's parts, and the summary's

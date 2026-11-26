@@ -1,5 +1,7 @@
 import SleepCore
 import SwiftUI
+import SleepGuardDesignKit
+import SleepStrings
 
 /// Name, birth year, sex, height, weight. The text is written back to the
 /// profile on Return and when the page goes away, not on every keystroke.

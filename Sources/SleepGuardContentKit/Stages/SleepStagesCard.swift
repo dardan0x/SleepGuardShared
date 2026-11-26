@@ -1,5 +1,7 @@
 import SleepCore
 import SwiftUI
+import SleepGuardDesignKit
+import SleepStrings
 
 /// The night's sleep stages: the title with an info button and a collapse
 /// chevron, the hypnogram and the legend. The host presents the info sheet

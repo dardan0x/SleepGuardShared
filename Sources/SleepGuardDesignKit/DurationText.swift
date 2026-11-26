@@ -1,4 +1,5 @@
 import Foundation
+import SleepStrings
 
 /// Spelled-out durations, as SleepGuard writes them.
 public enum DurationText {

@@ -1,4 +1,5 @@
 import SwiftUI
+import SleepStrings
 
 /// The sleep score ring (0–100) with the number in the middle.
 public struct SleepScoreGauge: View {

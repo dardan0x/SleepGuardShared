@@ -1,5 +1,6 @@
 import SleepCore
 import SwiftUI
+import SleepStrings
 
 /// One event (or snoring episode) in a list: kind, start time, length, and
 /// Share / Play buttons when those actions are given.

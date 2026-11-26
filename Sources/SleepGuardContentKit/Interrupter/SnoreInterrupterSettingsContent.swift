@@ -1,5 +1,7 @@
 import SleepCore
 import SwiftUI
+import SleepGuardDesignKit
+import SleepStrings
 
 /// The Snore Interrupter's settings sheet: what it does, how long it plays,
 /// the sound, and whether it's on. The screen owns the draft (`mode`, the

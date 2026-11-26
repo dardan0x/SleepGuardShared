@@ -4,6 +4,8 @@ import SleepCore
 import SwiftUI
 import Testing
 @testable import SleepGuardContentKit
+import SleepGuardDesignKit
+import SleepStrings
 
 /// The briefing, the profile prompt and the report render; the briefing's
 /// values read as SleepGuard's text; the PDF has one page per page of rows.

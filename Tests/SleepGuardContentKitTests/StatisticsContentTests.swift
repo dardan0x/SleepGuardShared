@@ -5,6 +5,8 @@ import SleepCore
 import SwiftUI
 import Testing
 @testable import SleepGuardContentKit
+import SleepGuardDesignKit
+import SleepStrings
 
 /// Every Statistics screen's content renders in two themes and the theme
 /// reaches it. Set `TEST_RUNNER_DESIGN_KIT_RENDER_DIR` to keep the PNGs.

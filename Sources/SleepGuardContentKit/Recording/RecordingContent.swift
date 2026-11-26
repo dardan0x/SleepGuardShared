@@ -1,5 +1,7 @@
 import SleepCore
 import SwiftUI
+import SleepGuardDesignKit
+import SleepStrings
 
 /// Before a night: what to expect, two tips, the recording options, then Start
 /// and Cancel pinned to the bottom. The screen checks the microphone and the

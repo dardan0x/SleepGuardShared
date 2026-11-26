@@ -4,6 +4,7 @@ import SwiftUI
 import Testing
 @testable import SleepGuardContentKit
 @testable import SleepGuardDesignKit
+import SleepStrings
 
 /// The interrupter's pieces render in two themes; names and labels come from
 /// the catalog. Set `TEST_RUNNER_DESIGN_KIT_RENDER_DIR` to keep the PNGs.

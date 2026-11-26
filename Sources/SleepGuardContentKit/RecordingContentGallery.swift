@@ -1,5 +1,6 @@
 import SleepCore
 import SwiftUI
+import SleepGuardDesignKit
 
 /// The recording screens' content with sample values, for previews and render
 /// tests. Internal: sample data only. The scrolling parts are drawn on their

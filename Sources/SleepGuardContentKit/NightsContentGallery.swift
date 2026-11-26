@@ -1,5 +1,6 @@
 import SleepCore
 import SwiftUI
+import SleepGuardDesignKit
 
 /// The nights list content with sample nights, for previews and render tests.
 /// Internal: sample data only.

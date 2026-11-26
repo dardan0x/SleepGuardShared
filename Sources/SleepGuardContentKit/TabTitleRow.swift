@@ -1,4 +1,6 @@
 import SwiftUI
+import SleepGuardDesignKit
+import SleepStrings
 
 /// A tab's title row: the tab's name in large bold type, its control on the
 /// trailing edge. The app hides the navigation bar on a tab's root and shows

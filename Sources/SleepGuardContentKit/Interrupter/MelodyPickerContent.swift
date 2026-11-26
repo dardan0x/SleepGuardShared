@@ -1,5 +1,7 @@
 import SleepCore
 import SwiftUI
+import SleepGuardDesignKit
+import SleepStrings
 
 /// Choosing the interrupter's sound: record your own, then your recordings,
 /// then the built-ins. Tapping one chooses and previews it; the screen plays

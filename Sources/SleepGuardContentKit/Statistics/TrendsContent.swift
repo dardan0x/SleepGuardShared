@@ -1,5 +1,7 @@
 import SleepCore
 import SwiftUI
+import SleepGuardDesignKit
+import SleepStrings
 
 /// The period Trends shows.
 public enum TrendsRange: CaseIterable, Hashable, Sendable {

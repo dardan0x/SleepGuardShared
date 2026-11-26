@@ -1,5 +1,6 @@
 import SleepCore
 import SwiftUI
+import SleepStrings
 
 struct ReportHeader: View {
   let title: String

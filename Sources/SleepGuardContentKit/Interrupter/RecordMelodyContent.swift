@@ -1,5 +1,7 @@
 import SleepCore
 import SwiftUI
+import SleepGuardDesignKit
+import SleepStrings
 
 /// Where the recorder is, for `RecordMelodyContent`.
 public enum MelodyRecordingState: Equatable, Sendable {

@@ -78,7 +78,7 @@ The shared package depends on nothing outside Apple's SDKs. Each app module impo
 |---|---|---|
 | Domain and storage | `Models` → SleepCore | `SleepDomain` → SleepCore<br>`SleepPersistence`, `SleepHealth` → SleepDomain, SleepCore |
 | Audio and detection | `AudioEngine` → SleepCore<br>`Env` → SleepCore, SleepMelodies | `SleepAudio` → SleepDomain, SleepCore, SleepMelodies |
-| Presentation infrastructure | `DesignSystem` → DesignKit, ContentKit, SleepStrings, SleepCore (and re-exports the kits) | `ScreenKit` → DesignKit |
+| Presentation infrastructure | `DesignSystem` → DesignKit, ContentKit, SleepStrings, SleepCore (no re-exports: every target imports and declares what it uses) | `ScreenKit` → DesignKit |
 | Screens | Feature packages → `DesignSystem` (for the kits), SleepCore | Feature modules → ContentKit, SleepCore, `SleepDomain` |
 | Composition root | App target | `AppShell` → DesignKit, SleepCore (+ every app module); brand targets → DesignKit |
 
@@ -195,6 +195,7 @@ Neither app re-tests a rule. When the score changes, one suite here changes, and
 - **Share values, not persistence.** A shared `@Model` would couple both apps' schemas, migration histories and actor isolation. Mapping at each edge costs one adapter per app, and parity tests cover it.
 - **Detection as a single ordered stream.** Samples, interrupter start and stop, settings changes and session end are timestamped messages into one actor. No side path mutates detection state. Golden outputs recorded from a real night pin the behaviour.
 - **Variation through optionals and slots, never flags.** Content takes `nil` to omit a section, or a view-builder slot for app-specific UI. A brand without HealthKit loses the stages card and the Health onboarding page without the package knowing brands exist.
+- **No re-exports.** No product re-exports another (`@_exported import` fails the test script and CI): a file imports every module it uses and its target declares it, here and in both apps, so a dependency is never hidden behind another module.
 - **Exact pins, verified from both sides.** A release reaches an app only through an explicit bump that passes that app's suite. Before release, this repo's CI builds SleepGuard and every UIKitWay brand against the candidate commit, and warns when an app's pin is more than two minor releases behind.
 
 ADRs live with the consumers: SleepGuard [0004](https://github.com/dardan0x/SleepGuard/blob/main/docs/adr/0004-shared-repo.md), [0005](https://github.com/dardan0x/SleepGuard/blob/main/docs/adr/0005-shared-design-kit.md), [0006](https://github.com/dardan0x/SleepGuard/blob/main/docs/adr/0006-shared-screen-content.md); UIKitWay [0004](https://github.com/dardan0x/SleepGuardUIKitWay/blob/main/docs/adr/0004-shared-repo.md), [0005](https://github.com/dardan0x/SleepGuardUIKitWay/blob/main/docs/adr/0005-shared-screen-content.md).

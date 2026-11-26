@@ -1,5 +1,6 @@
 import SleepCore
 import SwiftUI
+import SleepGuardDesignKit
 
 /// Settings, the profile editor, the start delay and its countdown with sample
 /// values, for previews and render tests. Internal: sample data only. The

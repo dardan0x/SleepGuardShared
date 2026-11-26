@@ -1,7 +1,3 @@
-// Screen content draws with the design kit and its strings: a screen that
-// imports this product needs no second import for them.
-@_exported import SleepGuardDesignKit
-
 // Screen content (one screen's loaded layout) shared by the SleepGuard apps.
 //
 // A content view takes SleepCore values and action closures, and draws. It

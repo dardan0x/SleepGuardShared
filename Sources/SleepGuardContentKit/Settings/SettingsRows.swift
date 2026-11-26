@@ -1,4 +1,6 @@
 import SwiftUI
+import SleepGuardDesignKit
+import SleepStrings
 
 /// A Settings section: a small caps title over a card of rows.
 struct SettingsCard<Rows: View>: View {

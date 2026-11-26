@@ -1,5 +1,7 @@
 import SleepCore
 import SwiftUI
+import SleepGuardDesignKit
+import SleepStrings
 
 /// The prestart's options: the start delay and, for an app with the Snore
 /// Interrupter, its row and the note under it. Goes in `PrestartContent`'s

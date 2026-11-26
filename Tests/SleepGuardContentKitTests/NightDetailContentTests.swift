@@ -3,6 +3,8 @@ import SleepCore
 import SwiftUI
 import Testing
 @testable import SleepGuardContentKit
+import SleepGuardDesignKit
+import SleepStrings
 
 /// The night detail and events grid render in two themes and the theme
 /// reaches them. Set `TEST_RUNNER_DESIGN_KIT_RENDER_DIR` to keep the PNGs.

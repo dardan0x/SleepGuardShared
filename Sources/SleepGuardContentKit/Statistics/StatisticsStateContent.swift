@@ -1,4 +1,6 @@
 import SwiftUI
+import SleepGuardDesignKit
+import SleepStrings
 
 /// No nights yet: an invitation to record the first one. The screen centres
 /// it and draws its own title.

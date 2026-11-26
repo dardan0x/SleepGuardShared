@@ -1,4 +1,5 @@
 import SwiftUI
+import SleepStrings
 
 /// Shown when the Snore Interrupter paused detection: how long in total.
 public struct RecordingGapsBanner: View {

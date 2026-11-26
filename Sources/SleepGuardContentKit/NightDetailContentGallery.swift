@@ -1,5 +1,6 @@
 import SleepCore
 import SwiftUI
+import SleepGuardDesignKit
 
 /// The night detail and events grid with a sample night, for previews and
 /// render tests. Internal: sample data only.

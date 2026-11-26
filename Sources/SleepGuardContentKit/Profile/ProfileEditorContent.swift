@@ -1,5 +1,7 @@
 import SleepCore
 import SwiftUI
+import SleepGuardDesignKit
+import SleepStrings
 
 /// The profile editor: four pages (you, goals, habits, personal) with Skip,
 /// Continue, Back and Save. Edits go straight into `profile`; the screen

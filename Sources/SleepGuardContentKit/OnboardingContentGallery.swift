@@ -1,5 +1,6 @@
 import SleepCore
 import SwiftUI
+import SleepGuardDesignKit
 
 /// Every onboarding page, and the permission pages once granted, for previews
 /// and render tests. Internal: sample states only.

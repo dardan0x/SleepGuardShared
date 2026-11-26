@@ -4,6 +4,7 @@
 import SwiftUI
 import Testing
 @testable import SleepGuardDesignKit
+import SleepStrings
 
 /// Every component renders in two themes, and the theme reaches them: the two
 /// renders differ. Set `TEST_RUNNER_DESIGN_KIT_RENDER_DIR` to keep the PNGs

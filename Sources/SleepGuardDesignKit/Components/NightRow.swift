@@ -1,4 +1,5 @@
 import SwiftUI
+import SleepStrings
 
 /// One night in a list of nights: time span, length and events, score. Taps
 /// open it. SleepGuard's session row in an expanded day.

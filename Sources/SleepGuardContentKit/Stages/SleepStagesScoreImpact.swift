@@ -1,5 +1,7 @@
 import SleepCore
 import SwiftUI
+import SleepGuardDesignKit
+import SleepStrings
 
 /// How the stages change the score: the formula, this night's penalty, and
 /// deep, REM and awake against their targets.
