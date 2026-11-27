@@ -31,12 +31,12 @@ jobs:
       - name: No re-exports
         # Every product imports what it uses; consumers declare what they use.
         run: "! grep -rn '@_exported' Sources Tests"
-      - name: SleepCore tests (incl. replay goldens)
-        run: swift test --filter SleepCoreTests
+      - name: SleepCore (incl. replay goldens), store, files, settings, HealthKit and notification tests
+        run: swift test --filter "SleepCoreTests|SleepStoreTests|SleepFilesTests|SleepHealthKitTests|SleepSettingsTests|SleepNotificationsTests"
 
   ui:
-    # String catalogs need Xcode's build system and the design kit renders with
-    # UIKit, so these tests run on a simulator.
+    # String catalogs need Xcode's build system, the design kit renders with
+    # UIKit and the audio kit needs AVAudioSession, so these run on a simulator.
     runs-on: macos-26
     timeout-minutes: 30
     steps:
@@ -47,13 +47,14 @@ jobs:
         run: |
           python3 scripts/generate-strings.py
           git diff --exit-code -- Sources/SleepStrings/Strings.swift
-      - name: SleepStrings, SleepMelodies, design kit and content kit tests
+      - name: SleepStrings, SleepMelodies, design kit, content kit and audio kit tests
         run: |
           set -o pipefail
           xcodebuild test -scheme SleepGuardShared-Package \
             -destination 'platform=iOS Simulator,name=iPhone 17 Pro,OS=latest' \
             -only-testing:SleepStringsTests -only-testing:SleepMelodiesTests \
-            -only-testing:SleepGuardDesignKitTests -only-testing:SleepGuardContentKitTests | tail -20
+            -only-testing:SleepGuardDesignKitTests -only-testing:SleepGuardContentKitTests \
+            -only-testing:SleepAudioKitTests | tail -20
 
   sleepguard:
     # SleepGuard built against this commit, the way a developer builds it locally.

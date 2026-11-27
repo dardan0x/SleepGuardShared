@@ -1,13 +1,13 @@
 # SleepGuardShared
 
-The architecture-independent core of SleepGuard: domain model and rules, localization, design system and screen content, as one versioned Swift package. It is consumed by two apps with deliberately different architectures:
+Everything the SleepGuard apps do the same way, as one versioned Swift package: the domain model and rules, the nights' SwiftData schema, the audio engine, files and their layout, settings, HealthKit mapping, logging, localization, the design system and screen content. It is consumed by two apps with deliberately different architectures:
 
 - [**SleepGuard**](https://github.com/dardan0x/SleepGuard): SwiftUI, MV, SwiftData.
 - [**SleepGuardUIKitWay**](https://github.com/dardan0x/SleepGuardUIKitWay): a UIKit shell with coordinators, a hexagonal core, and four white-label brands.
 
 ![Swift](https://img.shields.io/badge/Swift-6.2%20%C2%B7%20strict%20concurrency-orange)
 ![Platforms](https://img.shields.io/badge/iOS%2017%20%C2%B7%20watchOS%2010%20%C2%B7%20macOS%2014-blue)
-![Tests](https://img.shields.io/badge/tests-251-brightgreen)
+![Tests](https://img.shields.io/badge/tests-335-brightgreen)
 ![Dependencies](https://img.shields.io/badge/third--party%20dependencies-0-lightgrey)
 
 Reference material (every product, each app's integration module by module, versioning, tests) is in [docs/ARCHITECTURE_OVERVIEW.md](docs/ARCHITECTURE_OVERVIEW.md).
@@ -18,9 +18,9 @@ Reference material (every product, each app's integration module by module, vers
 
 SleepGuard began as a single SwiftUI app. The goal of the second app was to build the same product on a UIKit-first architecture, the shape most large iOS codebases have, and compare the two honestly. That only works if both apps produce identical results: the same detected events from the same audio, the same score, the same screens.
 
-The boundary is **behaviour versus composition**. Anything that can be computed or drawn from plain values is shared. Persistence, dependency injection, navigation, loading and lifecycle stay in each app, because that is the architecture being compared.
+The boundary is **behaviour versus composition**. Anything both apps do the same way is shared: what can be computed or drawn from plain values, and since 0.32.0 also the behaviour around it (audio, the stored nights' schema, files, settings, HealthKit, logging). Protocols and ports, dependency injection, navigation, loading and lifecycle stay in each app, because that is the architecture being compared.
 
-The extraction was incremental: 27 releases, each moving one concern (rules, then strings, then the design system, then screen content), with SleepGuard's test suite green on every release.
+The extraction was incremental: 37 releases. The first 31 each moved one concern (rules, then strings, then the design system, then screen content), with SleepGuard's test suite green on every release. The next six moved the behaviour both apps had copied (HealthKit and the raw log, settings, logging and files, the audio engine, one SwiftData schema), and 0.37.0 stopped the kits re-exporting each other.
 
 ---
 
@@ -28,30 +28,38 @@ The extraction was incremental: 27 releases, each moving one concern (rules, the
 
 ```
 SleepGuardContentKit        SwiftUI      Screen content: values, closures and view-builder slots in
-└─► SleepGuardDesignKit     SwiftUI      Theme (environment value), stateless components
-    ├─► SleepStrings        Foundation   String catalog, generated accessor
-    └─► SleepCore           Foundation   Domain values, rules, detection actor
+├─► SleepGuardDesignKit     SwiftUI      Theme (environment value), stateless components
+│   ├─► SleepStrings        Foundation   String catalog, generated accessor
+│   └─► SleepCore
+├─► SleepStrings
+└─► SleepCore               Foundation   Domain values, rules, detection actor
 
-SleepMelodies               Foundation   Bundled audio, keyed by SleepCore's Melody
-└─► SleepCore
+SleepStore                  SwiftData    The nights database: records, mapping, schema, safe opening
+├─► SleepCore
+└─► SleepLogging
 
-SleepHealthKit              HealthKit    A night in Apple Health: write it, read its stages
-└─► SleepCore
+SleepAudioKit               AVFoundation Capture, clips, playback, waveform, spectra, melodies (iOS)
+├─► SleepCore
+├─► SleepLogging
+└─► SleepMelodies           Foundation   Bundled audio, keyed by SleepCore's Melody
 
 SleepFiles                  Foundation   Files every app keeps alike: layout, clips folder, raw log,
 ├─► SleepCore                            checkpoint, profile, survey answers
 └─► SleepLogging
 
+SleepHealthKit              HealthKit    A night in Apple Health: write it, read its stages
+└─► SleepCore
+
 SleepSettings               Foundation   The settings every app has, in UserDefaults
 └─► SleepCore
 
-SleepLogging                os           Unified logging: Log.audio, .detection, .session, …
-
 SleepNotifications          UserNotif.   The start-delay notification
-SleepAudioKit               AVFoundation Capture, clips, playback, waveform, spectra, melodies (iOS)
-SleepStore                  SwiftData    The nights database: records, mapping, schema, safe opening
 └─► SleepStrings
+
+SleepLogging                os           Unified logging: Log.audio, .detection, .session, …
 ```
+
+No product re-exports another: each declares, and imports, what it uses.
 
 | Module | Responsibility | Invariants |
 |---|---|---|
@@ -76,15 +84,19 @@ The shared package depends on nothing outside Apple's SDKs. Each app module impo
 
 | Layer | SleepGuard | SleepGuardUIKitWay |
 |---|---|---|
-| Domain and storage | `Models` → SleepCore | `SleepDomain` → SleepCore<br>`SleepPersistence`, `SleepHealth` → SleepDomain, SleepCore |
-| Audio and detection | `AudioEngine` → SleepCore<br>`Env` → SleepCore, SleepMelodies | `SleepAudio` → SleepDomain, SleepCore, SleepMelodies |
-| Presentation infrastructure | `DesignSystem` → DesignKit, ContentKit, SleepStrings, SleepCore (no re-exports: every target imports and declares what it uses) | `ScreenKit` → DesignKit |
-| Screens | Feature packages → `DesignSystem` (for the kits), SleepCore | Feature modules → ContentKit, SleepCore, `SleepDomain` |
-| Composition root | App target | `AppShell` → DesignKit, SleepCore (+ every app module); brand targets → DesignKit |
+| Domain | `Models` → SleepCore, SleepStore, SleepFiles, SleepLogging | `SleepDomain` → SleepCore |
+| Storage | `Models` (reads), `Services` (`SessionCommitter` writes) → SleepStore; `Services` → SleepFiles | `SleepPersistence` → SleepStore, SleepFiles, SleepSettings, SleepLogging |
+| Audio and detection | `AudioEngine` → SleepAudioKit, SleepCore, SleepLogging<br>`Services` → SleepAudioKit, SleepMelodies, SleepNotifications | `SleepAudio` → SleepAudioKit, SleepCore |
+| Settings, Health | `Config` → SleepSettings; `Health` → SleepHealthKit | `SleepPersistence` → SleepSettings; `SleepHealth` → SleepHealthKit |
+| Presentation infrastructure | `DesignSystem` → DesignKit, ContentKit, SleepStrings, SleepStore, SleepCore | `ScreenKit` → DesignKit |
+| Screens | Feature packages → ContentKit, DesignKit, SleepStrings, SleepStore, SleepCore (each only what it uses) | Feature modules → ContentKit, DesignKit, SleepStrings, SleepCore, `SleepDomain` |
+| Composition root | App target → SleepCore, SleepStore, SleepFiles, SleepLogging, DesignKit, SleepStrings (declared in the Xcode project) | `AppShell` → DesignKit, SleepStrings, SleepCore, SleepFiles, SleepLogging, SleepNotifications (+ every app module) |
+
+Every module imports, and declares, the shared products it uses; nothing is re-exported.
 
 Two consequences:
 - **UIKitWay's domain is written in SleepCore types.** `SleepDomain` adds ports and use cases, not a parallel model.
-- **SleepGuard's domain maps into them.** `Models` keeps its SwiftData schema and maps each session to `Night` at the boundary.
+- **Both apps store the same records.** SleepGuard reads `NightRecord` with `@Query`; UIKitWay keeps the same records inside a repository actor behind `SessionRepository`. Each maps them to `Night` with the shared mapping.
 
 ---
 
@@ -103,13 +115,15 @@ A shared change and its adoption are developed together locally, then released a
 
 ### Runtime seams
 
-There are four seams. Each one is a type in this package, not a protocol either app has to implement:
+There are six seams. Each one is a type in this package, not a protocol either app has to implement:
 
 | Seam | Type | SleepGuard | SleepGuardUIKitWay |
 |---|---|---|---|
-| **Domain values** | `Night`, `NightSummary` | `SleepSession+Night` maps the `@Model`. The score is cached on the model, stamped with `SleepScoreCacheVersion` | The persistence adapter maps its records behind `SessionRepository`. Use cases work on `Night` directly |
-| **Detection** | `DetectionEngine` (actor) | `RealtimeDetectionTracker` streams timestamped messages in and performs outputs on the main actor | `RecordingSession` (domain actor) streams in and applies outputs to a checkpointed draft |
-| **Theme** | `Theme`, `\.theme` | `AppTheme` from `Theme.sleepGuard`, set once at the app root | `BrandConfiguration.theme`, set by `HostingScreen` on each `UIHostingController` |
+| **Stored nights** | `NightRecord`, `NightEventRecord` (`SleepStore`) | `@Query` on the main context; `SessionCommitter` is the only writer; a launch pass refreshes stale summaries | A `@ModelActor` repository behind `SessionRepository`; the records never leave it |
+| **Domain values** | `Night`, `NightSummary` | `record.night` / `record.summary`; the summary is stored with `SleepScore.cacheVersion` | Use cases work on `Night` directly |
+| **Detection** | `DetectionEngine` (actor), `LiveSampleClassifier`, `SampleDecimator` | `RealtimeDetectionTracker` streams timestamped messages in and performs outputs on the main actor | `RecordingSession` (domain actor) streams in and applies outputs to a checkpointed draft |
+| **Audio** | `CaptureEngine`, `ClipPlayerEngine`, `MelodyPlayback`, … (`SleepAudioKit`) | Wrapped by `AudioRecorder`, the interrupter and the playback controller, behind their protocols | Conformed to `AudioCapture`, `ClipPlayer` and the melody ports in `SleepAudio` |
+| **Theme** | `Theme`, `\.theme` | `.environment(\.theme, .sleepGuard)` once at the app root | `BrandConfiguration.theme`, put in the environment by ScreenKit's hosting helpers (`host`, `render`, `Theme.hosting`) |
 | **Screen content** | `*Content` views | A SwiftUI container owns loading and `ViewState`; closures set sheet state or call `RouterPath` | A hosted screen owns loading and `ViewState`; closures forward to `Routes`, which a coordinator implements |
 
 The last seam is where the two architectures meet. The same content, hosted by each app:
@@ -165,13 +179,15 @@ Each layer is tested at its own level, so the suites don't overlap:
 
 | Layer | What the tests check | How | Count |
 |---|---|---|---:|
-| `SleepCore` rules | Score, episodes, stage analysis, statistics, playback sequencing, interrupter gaps, storage plan, briefing, report | `swift test` on macOS. No simulator, no fixtures beyond values; the suite runs in seconds | 208 |
-| Detection | The state machine's decisions over time | Unit tests on the state machine and the actor, plus **replay goldens**: four excerpts of a real night's samples (`loud-onset`, `sustained-snoring`, `sparse-snores`, `short-bursts-and-quiet`) and the exact decisions recorded for them | (in the 208) |
+| `SleepCore` rules | Score, episodes, stage analysis, statistics, playback sequencing, interrupter gaps, storage plan and sweep, live classification, the decimator, sample nights, briefing, report; stored-value fixtures and the score golden | `swift test` on macOS. No simulator, no fixtures beyond values; the suite runs in seconds | 241 |
+| Detection | The state machine's decisions over time | Unit tests on the state machine and the actor, plus **replay goldens**: four excerpts of a real night's samples (`loud-onset`, `sustained-snoring`, `sparse-snores`, `short-bursts-and-quiet`) and the exact decisions recorded for them | (in the 241) |
+| Store, files, settings, HealthKit, notification | Records round-trip, unknown raw values, stale summaries, a broken store kept; files, checkpoint format, settings, the Health sample, the start notification | `swift test` on macOS, in-memory SwiftData and temporary folders | 24 |
+| Audio | Levels, the spectral score and the FFT gate, clip writing and compression, playback, waveform, clip spectrum and extraction, melody files | Generated tones on the simulator | 24 |
 | Copy | Values to localized text (`BriefingText`, labels, formats) | Each rule output mapped to the expected `Strings` entry | (in ContentKit) |
-| Components and screens | Every component and every screen's content renders, in two themes, and the theme changes the output | `ImageRenderer` on the simulator; PNGs kept for review on request | 39 |
+| Components and screens | Every component and every screen's content renders, in two themes, and the theme changes the output; strings | `ImageRenderer` on the simulator; PNGs kept for review on request | 46 |
 | Report | The PDF has one page per page of rows | Rendered and parsed back with `CGPDFDocument` | (in ContentKit) |
-| **SleepGuard** | The `@Model` → `Night` mapping (parity), the score cache, state owners, services | In-memory SwiftData, fakes for every service | 211 |
-| **SleepGuardUIKitWay** | Use cases against fake ports, adapters against real stores, coordinators against a navigator spy, each brand's app | Domain on macOS; flows with no UI | 210 + 9 per brand |
+| **SleepGuard** | Its reads on the shared records (parity), the launch re-score, state owners, services and their contract tests | In-memory SwiftData, fakes for every service | 180 |
+| **SleepGuardUIKitWay** | Use cases against fake ports, adapters against real stores (port contracts), coordinators against a navigator spy, each brand's app | Domain on macOS; flows with no UI | 273 + 13 per brand |
 
 Neither app re-tests a rule. When the score changes, one suite here changes, and both apps' suites confirm that their mappings and composition still hold against the new release.
 
@@ -186,7 +202,7 @@ Neither app re-tests a rule. When the score changes, one suite here changes, and
 
 - Render tests prove that a screen draws in every theme and that themes reach it. They are not pixel snapshots, and `ImageRenderer` can't draw UIKit-backed views (`List`, `Toggle`, some `Picker` styles). Those parts are checked in the apps.
 - Each app's mapping layer is its own responsibility. The shared suite can't see a field an app forgets to map, so each app's parity tests do that job.
-- Live audio, permissions and HealthKit are outside the package. The detection pipeline is verified here from samples onward; the microphone end needs a device.
+- The audio kit is tested on generated tones; the microphone end, permissions and HealthKit need a device. The detection pipeline is verified here from samples onward.
 
 ---
 
@@ -207,10 +223,11 @@ ADRs live with the consumers: SleepGuard [0004](https://github.com/dardan0x/Slee
 
 | Task | How |
 |---|---|
-| Test | `sh scripts/run-tests.sh`: SleepCore on macOS (229, including replay goldens, stored-value fixtures and the score golden); the kits render every component and screen in two themes on the simulator (39); strings and melodies (4) |
-| Release | Commit, push, `git tag -a 0.28.0 -m "…" && git push origin 0.28.0`. Then, in each app: `sh scripts/bump-shared.sh 0.28.0` and that app's tests |
+| Test | `sh scripts/run-tests.sh` (it first fails on any `@_exported import`): on macOS SleepCore, SleepStore, SleepFiles, SleepSettings, SleepHealthKit and SleepNotifications (265, including replay goldens, stored-value fixtures and the score golden); on the simulator the audio kit (24) and the kits and strings (46) |
+| Release | Commit, push, `git tag -a <version> -m "…" && git push origin <version>`. Then, in each app: `sh scripts/bump-shared.sh <version>` and that app's tests |
 | Add a string | Add it to `Sources/SleepStrings/Resources/Strings.txt`, then run `python3 scripts/generate-xcstrings.py` |
 | Change detection | Re-record the goldens deliberately with `sh scripts/record-replay-goldens.sh` and explain the diff |
+| Change the schema | `SleepStore`'s records: add properties with defaults only; a breaking change needs a new `SleepStoreSchema` version and migration stage, and both apps take it |
 | Change a stored value | Types marked `StoredValue` are persisted by the apps: add properties only (optional or decoded with a default), never rename or remove a property or raw value, and add a `Tests/SleepCoreTests/Fixtures/StoredValues/<version>/` fixture |
 
 ### Release policy
@@ -220,4 +237,4 @@ ADRs live with the consumers: SleepGuard [0004](https://github.com/dardan0x/Slee
 - **Renames and removals** of public API go through one minor release as `@available(*, deprecated, renamed:)` (or `message:`) first, and are removed in the next minor. Example: `Night.minimumSaveDuration` was deprecated in 0.30.0 in favour of `SaveRules` and removed in 0.31.0.
 - **Skew** between the apps is allowed, but CI warns beyond two minor releases; bump with each app's `bump-shared.sh`.
 
-Ground rules: Swift 6 strict concurrency; `Sendable` values; Foundation-only `SleepCore`; values in, closures out; every visual constant from `Theme`; no app-specific branches.
+Ground rules: Swift 6 strict concurrency; `Sendable` values; Foundation-only `SleepCore`; values in, closures out; every visual constant from `Theme`; no app-specific branches; no re-exports.
