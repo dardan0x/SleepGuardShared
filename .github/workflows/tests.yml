@@ -71,12 +71,16 @@ jobs:
           path: SleepGuard
       - name: Select newest Xcode 26
         run: sudo xcode-select -s "$(ls -d /Applications/Xcode_26*.app | sort -V | tail -1)"
-      - name: Build SleepGuard (dev workspace → this commit)
+      - name: Build SleepGuard (against this commit)
+        # SleepGuard's own workspace builds the pinned release; a workspace
+        # that also lists this checkout overrides the pin with this commit.
         working-directory: SleepGuard
         run: |
           set -o pipefail
+          mkdir -p ../local.xcworkspace
+          printf '<?xml version="1.0" encoding="UTF-8"?>\n<Workspace version = "1.0">\n<FileRef location = "absolute:%s/SleepGuard.xcodeproj"></FileRef>\n<FileRef location = "absolute:%s/../SleepGuardShared"></FileRef>\n</Workspace>\n' "$PWD" "$PWD" > ../local.xcworkspace/contents.xcworkspacedata
           xcodebuild build \
-            -workspace SleepGuard.xcworkspace \
+            -workspace ../local.xcworkspace \
             -scheme SleepGuard \
             -destination 'generic/platform=iOS Simulator' \
             -derivedDataPath ../.build/app \

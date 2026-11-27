@@ -96,7 +96,7 @@ Both apps pin an exact release and can override it with a local checkout. Becaus
 
 | | Release (CI, reproducible) | Local (day-to-day) |
 |---|---|---|
-| **SleepGuard** | `SleepGuard.xcodeproj` and every package manifest: `.package(url: …, exact: "0.27.0")` | `SleepGuard.xcworkspace` adds `../SleepGuardShared` as a local package. SwiftPM resolves the identity to the local copy |
+| **SleepGuard** | `SleepGuard.xcworkspace` / `.xcodeproj` (SleepGuardShared under Package Dependencies) and every package manifest: `.package(url: …, exact: …)` | Add `../SleepGuardShared` to the workspace in Xcode for the time being, or build a throwaway workspace listing both (this repo's CI does); SwiftPM resolves the identity to the local copy |
 | **SleepGuardUIKitWay** | `TUIST_SHARED_RELEASE=1 tuist generate`: `Project.swift` declares `.remote(…, .exact(version))` | `tuist generate` declares `.local(path: "../SleepGuardShared")` |
 
 A shared change and its adoption are developed together locally, then released and pinned. `scripts/bump-shared.sh <version>` in each app moves every pin to the new release and re-resolves.
